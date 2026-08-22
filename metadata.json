@@ -1,0 +1,6 @@
+{
+  "name": "Oxygen Services",
+  "description": "Specialists in Medical Oxygen Equipment Service & Repair across Mumbai, Pune, and Lucknow. Expert diagnosis, maintenance, and tracking for oxygen machines and concentrators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

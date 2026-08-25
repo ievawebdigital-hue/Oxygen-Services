@@ -432,14 +432,6 @@ export default function RecentActivityPanel({
                       >
                         {copiedId === act.serviceId ? '✓ Copied' : act.serviceId}
                       </button>
-                      <Link
-                        href={`/track-service?id=${act.serviceId}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-slate-400 hover:text-[#1677FF] transition"
-                        title="Open customer track view"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                      </Link>
                     </div>
                   )}
                 </div>

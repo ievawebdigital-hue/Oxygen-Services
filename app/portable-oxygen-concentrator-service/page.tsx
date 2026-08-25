@@ -20,9 +20,10 @@ import { SERVICES } from '@/lib/data/services';
 import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 
 export const metadata: Metadata = {
-  title: 'Portable Oxygen Concentrator (POC) Service & Repair | Oxygen Services',
+  title: 'Portable Oxygen Concentrator (POC) Service & Repair | Oxy Breath Services',
   description: 'Specialist portable oxygen concentrator (POC) service, column replacement, breath-detection pulse sensor calibration, and battery diagnostic testing in Mumbai, Pune, and Lucknow.',
   keywords: [
+    'Oxy Breath Services',
     'portable oxygen concentrator service',
     'portable oxygen concentrator repair',
     'POC service India',

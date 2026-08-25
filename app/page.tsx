@@ -4,88 +4,73 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import MobileStickyBar from '@/components/layout/MobileStickyBar';
 import HeroSection from '@/components/home/HeroSection';
-import TrustBar from '@/components/home/TrustBar';
-import CoreServicesSection from '@/components/home/CoreServicesSection';
-import DeviceExplanationDiagram from '@/components/home/DeviceExplanationDiagram';
-import ProblemDiagnosticSelector from '@/components/home/ProblemDiagnosticSelector';
-import ServiceProcessTimeline from '@/components/home/ServiceProcessTimeline';
-import BranchLocationsSection from '@/components/home/BranchLocationsSection';
-import CustomerTestimonialsSection from '@/components/home/CustomerTestimonialsSection';
-import FaqSection from '@/components/home/FaqSection';
-import FinalCtaSection from '@/components/home/FinalCtaSection';
-import { getOrganizationSchema, getFaqSchema } from '@/lib/seo';
-import { FAQS } from '@/lib/data/faqs';
+import HelplineUrgentBanner from '@/components/home/HelplineUrgentBanner';
+import BrandLogosBanner from '@/components/home/BrandLogosBanner';
+import ServicesThreeCardSection from '@/components/home/ServicesThreeCardSection';
+import WhyChooseUsSection from '@/components/home/WhyChooseUsSection';
+import MiddleHelpBanner from '@/components/home/MiddleHelpBanner';
+import AboutAndEstimateSection from '@/components/home/AboutAndEstimateSection';
+import GoogleReviewsSection from '@/components/home/GoogleReviewsSection';
+import { getOrganizationSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Oxygen Services | Specialist Oxygen Concentrator & Machine Service in Mumbai, Pune, Lucknow',
-  description: 'Specialist, vendor-independent medical oxygen equipment service and repair. Molecular sieve bed repacking, compressor rebuilds, and calibrated ultrasonic purity testing in Mumbai, Pune, and Lucknow. Call 9820370015.',
+  title: 'Oxy Breath Services | Oxygen Concentrator Repair & Machine Rentals in Mumbai, Pune, Lucknow',
+  description: 'Specialist oxygen concentrator repair, molecular sieve repours, compressor rebuilding, and sanitized 5L, 10L & Portable POC machine rentals across Mumbai, Pune, and Lucknow. Call 9820370015.',
   keywords: [
-    'oxygen concentrator service',
-    'oxygen machine service',
-    'oxygen equipment service',
-    'oxygen concentrator repair near me',
-    'oxygen machine repair near me',
-    'oxygen concentrator servicing',
-    'oxygen concentrator maintenance',
-    'molecular sieve repacking',
-    'oxygen concentrator service Mumbai',
-    'oxygen machine service Pune',
-    'oxygen equipment service Lucknow'
+    'Oxy Breath Services',
+    'oxygen concentrator repair',
+    'oxygen concentrator on rent',
+    'oxygen machine rent Mumbai',
+    'oxygen concentrator service Pune',
+    'oxygen machine repair Lucknow',
+    'portable oxygen concentrator rental',
+    'sieve bed repour',
+    '5L oxygen concentrator rent',
+    '10L oxygen concentrator rent'
   ],
   alternates: {
-    canonical: 'https://oxygenservices.in'
+    canonical: 'https://oxybreathservices.in'
   }
 };
 
 export default function HomePage() {
   const orgSchema = getOrganizationSchema();
-  const faqSchema = getFaqSchema(FAQS.slice(0, 10));
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7FAFC]">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Header Navigation */}
       <Navbar />
 
       <main className="flex-grow">
-        {/* Hero Section */}
+        {/* 1. Hero Carousel */}
         <HeroSection />
 
-        {/* Value Proposition Trust Bar */}
-        <TrustBar />
+        {/* 2. Urgent Helpline Action Banner ("Get Your Oxygen-Concentrator Fixed NOW!") */}
+        <HelplineUrgentBanner />
 
-        {/* 4 Core Service Offerings */}
-        <CoreServicesSection />
+        {/* 3. Leading Equipment Brands Strip */}
+        <BrandLogosBanner />
 
-        {/* Interactive Device Explanation & Airflow Visualizer */}
-        <DeviceExplanationDiagram />
+        {/* 4. Services (3-Card Section: Sieve Repour, Compressor Rebuild, Valve/PCB) */}
+        <ServicesThreeCardSection />
 
-        {/* 8 Common Problems Diagnostic Selector */}
-        <ProblemDiagnosticSelector />
+        {/* 5. Why Choose Us (6-Pillar Feature Grid) */}
+        <WhyChooseUsSection />
 
-        {/* 5-Stage Transparent Workflow */}
-        <ServiceProcessTimeline />
+        {/* 6. Middle Helpline Callout ("Getting Help is Easy") */}
+        <MiddleHelpBanner />
 
-        {/* 3 Physical Branch Locations with Maps */}
-        <BranchLocationsSection />
+        {/* 7. Two-Column Section: About Us & 10-Point Checklist + Free Estimate Form */}
+        <AboutAndEstimateSection />
 
-        {/* Customer Testimonials for Mumbai, Pune, and Lucknow */}
-        <CustomerTestimonialsSection />
-
-        {/* Frequently Asked Questions */}
-        <FaqSection />
-
-        {/* High-Impact Final Call to Action */}
-        <FinalCtaSection />
+        {/* 8. Google Reviews & Testimonials Carousel ("What our client says") */}
+        <GoogleReviewsSection />
       </main>
 
       {/* Footer */}
@@ -96,3 +81,4 @@ export default function HomePage() {
     </div>
   );
 }
+

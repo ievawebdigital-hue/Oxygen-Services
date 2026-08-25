@@ -6,11 +6,11 @@ export function getOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
-    '@id': 'https://oxygenservices.in/#organization',
-    name: 'Oxygen Services',
-    alternateName: 'Oxygen Services India',
+    '@id': 'https://oxybreathservices.in/#organization',
+    name: 'Oxy Breath Services',
+    alternateName: 'Oxy Breath Services India',
     description: 'Specialist vendor-independent technical service, diagnosis, repair, and maintenance for medical oxygen machines, oxygen concentrators, and portable oxygen equipment across Mumbai, Pune, and Lucknow.',
-    url: 'https://oxygenservices.in',
+    url: 'https://oxybreathservices.in',
     telephone: '+919820370015',
     contactPoint: [
       {
@@ -38,7 +38,7 @@ export function getOrganizationSchema() {
     },
     department: BRANCHES.map((b) => ({
       '@type': 'LocalBusiness',
-      name: `Oxygen Services - ${b.name}`,
+      name: `Oxy Breath Services - ${b.name}`,
       address: {
         '@type': 'PostalAddress',
         streetAddress: b.address,
@@ -57,9 +57,9 @@ export function getBranchLocalBusinessSchema(branchId: 'mumbai' | 'pune' | 'luck
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: `Oxygen Services - ${branch.name}`,
+    name: `Oxy Breath Services - ${branch.name}`,
     description: `Specialist medical oxygen machine and oxygen concentrator service, diagnostic repair, and technician support in ${branch.city}.`,
-    url: `https://oxygenservices.in/locations/${branch.id}`,
+    url: `https://oxybreathservices.in/locations/${branch.id}`,
     telephone: `+91${branch.primaryPhone}`,
     address: {
       '@type': 'PostalAddress',
@@ -93,7 +93,7 @@ export function getServicesSchema() {
       description: service.description,
       provider: {
         '@type': 'MedicalBusiness',
-        name: 'Oxygen Services'
+        name: 'Oxy Breath Services'
       },
       areaServed: ['Mumbai', 'Pune', 'Lucknow', 'India'],
       serviceType: 'Medical Equipment Repair'
@@ -146,11 +146,11 @@ export function getArticleSchema(article: {
     description: article.summary,
     datePublished: article.publishedDate,
     dateModified: article.publishedDate,
-    url: `https://oxygenservices.in/resources/${article.slug}`,
+    url: `https://oxybreathservices.in/resources/${article.slug}`,
     publisher: {
       '@type': 'MedicalBusiness',
-      name: 'Oxygen Services',
-      url: 'https://oxygenservices.in'
+      name: 'Oxy Breath Services',
+      url: 'https://oxybreathservices.in'
     },
     about: {
       '@type': 'MedicalDevice',

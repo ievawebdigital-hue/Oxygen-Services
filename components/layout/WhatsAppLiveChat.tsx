@@ -80,7 +80,7 @@ export default function WhatsAppLiveChat() {
       const puneBranch = BRANCHES.find((b) => b.id === 'pune');
       return {
         number: puneBranch?.whatsapp || '8149324456',
-        city: 'Pune (Ojasvi Medical Equipment)',
+        city: 'Pune (OXY BREATH SERVICES)',
         phone: puneBranch?.primaryPhone || '8149324456'
       };
     }
@@ -88,7 +88,7 @@ export default function WhatsAppLiveChat() {
       const lkoBranch = BRANCHES.find((b) => b.id === 'lucknow');
       return {
         number: lkoBranch?.whatsapp || '9820370015',
-        city: 'Lucknow (Health Hub Services)',
+        city: 'Lucknow (OXY BREATH SERVICES)',
         phone: lkoBranch?.primaryPhone || '9820370015'
       };
     }
@@ -96,7 +96,7 @@ export default function WhatsAppLiveChat() {
       const mumBranch = BRANCHES.find((b) => b.id === 'mumbai');
       return {
         number: mumBranch?.whatsapp || '9820370015',
-        city: 'Mumbai (V CARE SURGICAL)',
+        city: 'Mumbai (OXY BREATH SERVICES)',
         phone: mumBranch?.primaryPhone || '9820370015'
       };
     }
@@ -110,7 +110,7 @@ export default function WhatsAppLiveChat() {
   const targetedContact = getTargetedContact();
 
   const handleSendMessage = (msgToSend?: string) => {
-    const text = msgToSend || customMessage || 'Hello Oxygen Services, I need assistance with my oxygen equipment.';
+    const text = msgToSend || customMessage || 'Hello Oxy Breath Services, I need assistance with my oxygen equipment.';
     const branchPrefix = selectedBranchId !== 'all' ? `[${selectedBranchId.toUpperCase()} INQUIRY] ` : '';
     const fullText = `${branchPrefix}${text}`;
     const url = `https://wa.me/91${targetedContact.number}?text=${encodeURIComponent(fullText)}`;

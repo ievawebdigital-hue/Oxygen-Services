@@ -22,9 +22,10 @@ import { SERVICES } from '@/lib/data/services';
 import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 
 export const metadata: Metadata = {
-  title: 'Oxygen Concentrator Service & Repair | Oxygen Services',
+  title: 'Oxygen Concentrator Service & Repair | Oxy Breath Services',
   description: 'Specialist oxygen concentrator service, molecular sieve bed repacking, compressor overhaul, and calibrated ultrasonic purity testing in Mumbai, Pune, and Lucknow.',
   keywords: [
+    'Oxy Breath Services',
     'oxygen concentrator service',
     'oxygen concentrator repair',
     'oxygen concentrator servicing',

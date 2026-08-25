@@ -17,9 +17,10 @@ import MobileStickyBar from '@/components/layout/MobileStickyBar';
 import { ARTICLES } from '@/lib/data/knowledge';
 
 export const metadata: Metadata = {
-  title: 'Oxygen Equipment Guides & Troubleshooting Hub | Oxygen Services',
-  description: 'Technical maintenance guides, alarm troubleshooting, molecular sieve life cycle explanations, and preventive care for medical oxygen equipment in Mumbai, Pune, and Lucknow.',
+  title: 'Oxygen Equipment Guides & Troubleshooting Hub | Oxy Breath Services',
+  description: 'Technical maintenance guides, alarm troubleshooting, molecular sieve life cycle explanations, and preventive care for medical oxygen equipment by Oxy Breath Services in Mumbai, Pune, and Lucknow.',
   keywords: [
+    'Oxy Breath Services guides',
     'oxygen concentrator troubleshooting',
     'oxygen concentrator error code',
     'sieve bed repacking guide',

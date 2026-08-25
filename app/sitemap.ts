@@ -3,14 +3,14 @@ import { SERVICES } from '@/lib/data/services';
 import { ARTICLES } from '@/lib/data/knowledge';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://oxygenservices.in';
+  const baseUrl = 'https://oxybreathservices.in';
   const now = new Date();
 
   const coreRoutes = [
     '',
+    '/about',
     '/services',
     '/request-service',
-    '/track-service',
     '/locations',
     '/locations/mumbai',
     '/locations/pune',
@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${baseUrl}${route}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1.0 : route.startsWith('/locations') || route.startsWith('/services') ? 0.9 : 0.8
+    priority: route === '' || route === '/about' ? 1.0 : route.startsWith('/locations') || route.startsWith('/services') ? 0.9 : 0.8
   }));
 
   const serviceRoutes = SERVICES.map((service) => ({

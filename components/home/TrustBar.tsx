@@ -47,7 +47,7 @@ export default function TrustBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-[#1677FF]">
-            Why Choose Oxygen Services
+            Why Choose Oxy Breath Services
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1F33] mt-1">
             Engineered For Precision & Reliability

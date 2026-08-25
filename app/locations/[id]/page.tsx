@@ -41,9 +41,10 @@ export async function generateMetadata({
   if (!branch) return { title: 'Branch Not Found' };
 
   return {
-    title: `Oxygen Concentrator & Machine Service in ${branch.city} | Oxygen Services`,
-    description: `Specialist oxygen machine and oxygen concentrator service in ${branch.city}, ${branch.state}. Molecular sieve repacking, compressor rebuilds, and ultrasonic purity testing at ${branch.address}.`,
+    title: `Oxygen Concentrator & Machine Service in ${branch.city} | Oxy Breath Services`,
+    description: `Specialist oxygen machine and oxygen concentrator service by Oxy Breath Services in ${branch.city}, ${branch.state}. Molecular sieve repacking, compressor rebuilds, and ultrasonic purity testing at ${branch.address}.`,
     keywords: [
+      `Oxy Breath Services ${branch.city}`,
       `oxygen concentrator service ${branch.city}`,
       `oxygen machine repair ${branch.city}`,
       `oxygen equipment repair ${branch.city}`,

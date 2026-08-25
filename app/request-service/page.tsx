@@ -6,52 +6,61 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   Wrench,
+  Package,
   CheckCircle2,
   AlertTriangle,
   Upload,
   Phone,
   MessageSquare,
-  Search,
+  Home,
   MapPin,
   Calendar,
   ShieldAlert,
   ArrowRight,
   ArrowLeft,
-  FileText
+  FileText,
+  Sparkles
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import MobileStickyBar from '@/components/layout/MobileStickyBar';
 import { createServiceTicket, ServiceTicket } from '@/lib/serviceStore';
+import { addActivityLog } from '@/lib/activityStore';
 import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 import { COMMON_PROBLEMS } from '@/lib/data/problems';
+import { RENTAL_EQUIPMENT } from '@/lib/data/rentals';
 
 function ServiceRequestForm() {
   const searchParams = useSearchParams();
-  const prefilledEquipment = searchParams.get('equipment') || 'Oxygen Concentrator';
-  const prefilledProblem = searchParams.get('problem') || '';
-  const prefilledBranch = searchParams.get('branch') || 'mumbai';
+  const initialMode = (searchParams.get('mode') === 'rent' ? 'rent' : 'repair') as 'repair' | 'rent';
+  const prefilledBrand = searchParams.get('brand') || '';
+  const prefilledEquipment = searchParams.get('equipment') || '';
+  const prefilledProblem = searchParams.get('issue') || searchParams.get('problem') || '';
+  const prefilledCity = (searchParams.get('city') as any) || 'Mumbai';
+
+  const [bookingMode, setBookingMode] = useState<'repair' | 'rent'>(initialMode);
 
   // Form State
-  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     customerName: '',
     mobileNumber: '',
     whatsappNumber: '',
     email: '',
-    city: 'Mumbai' as 'Mumbai' | 'Pune' | 'Lucknow',
-    branchId: 'mumbai' as 'mumbai' | 'pune' | 'lucknow',
+    city: (['Mumbai', 'Pune', 'Lucknow'].includes(prefilledCity) ? prefilledCity : 'Mumbai') as 'Mumbai' | 'Pune' | 'Lucknow',
+    branchId: (prefilledCity.toLowerCase() === 'pune' ? 'pune' : prefilledCity.toLowerCase() === 'lucknow' ? 'lucknow' : 'mumbai') as 'mumbai' | 'pune' | 'lucknow',
     equipmentType: (prefilledEquipment.includes('Portable')
       ? 'Portable Oxygen Concentrator'
-      : prefilledEquipment.includes('Machine')
+      : prefilledEquipment.includes('10L')
       ? 'Oxygen Machine'
       : 'Oxygen Concentrator') as ServiceTicket['equipmentType'],
-    brand: '',
+    brand: prefilledBrand || '',
     modelNumber: '',
     problemSummary: prefilledProblem,
+    rentalDuration: '1 Month',
+    rentalEquipment: prefilledEquipment || '5L Stationary Concentrator (Philips EverFlo)',
     serviceType: 'Bench Diagnostic' as ServiceTicket['serviceType'],
     preferredDate: '',
-    fulfillmentType: 'Branch Drop-off' as ServiceTicket['fulfillmentType'],
+    fulfillmentType: 'Doorstep Pickup' as ServiceTicket['fulfillmentType'],
     address: '',
     photoUrl: '',
     additionalMessage: ''
@@ -117,13 +126,21 @@ function ServiceRequestForm() {
       setErrorMsg('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (!formData.problemSummary.trim()) {
-      setErrorMsg('Please select or specify the equipment issue.');
+
+    if (bookingMode === 'repair' && !formData.problemSummary.trim()) {
+      setErrorMsg('Please select or specify the equipment problem.');
       return;
     }
 
     setIsSubmitting(true);
     try {
+      const summaryText = bookingMode === 'rent'
+        ? `[RENTAL RESERVATION] Machine: ${formData.rentalEquipment} | Duration: ${formData.rentalDuration} | City: ${formData.city}`
+        : formData.problemSummary;
+
+      const brandText = bookingMode === 'rent' ? 'Rental Fleet Unit' : (formData.brand || 'Oxygen Equipment');
+      const modelText = bookingMode === 'rent' ? formData.rentalEquipment : (formData.modelNumber || 'Standard Unit');
+
       const ticket = createServiceTicket({
         customerName: formData.customerName,
         mobileNumber: formData.mobileNumber,
@@ -132,10 +149,10 @@ function ServiceRequestForm() {
         city: formData.city,
         branchId: formData.branchId,
         equipmentType: formData.equipmentType,
-        brand: formData.brand || 'Oxygen Equipment',
-        modelNumber: formData.modelNumber || 'Standard Unit',
-        problemSummary: formData.problemSummary,
-        serviceType: formData.serviceType,
+        brand: brandText,
+        modelNumber: modelText,
+        problemSummary: summaryText,
+        serviceType: bookingMode === 'rent' ? 'Preventive Maintenance' : formData.serviceType,
         preferredDate: formData.preferredDate || new Date().toISOString().split('T')[0],
         fulfillmentType: formData.fulfillmentType,
         address: formData.address || '',
@@ -143,9 +160,20 @@ function ServiceRequestForm() {
         additionalMessage: formData.additionalMessage || ''
       });
 
+      // Log activity
+      addActivityLog({
+        type: 'ticket_created',
+        title: bookingMode === 'rent' ? 'New Machine Rental Reservation' : 'New Repair Ticket Registered',
+        description: `Registered for ${ticket.customerName} in ${ticket.city} (${ticket.equipmentType})`,
+        serviceId: ticket.serviceId,
+        customerName: ticket.customerName,
+        actor: 'Customer Booking Portal',
+        branch: ticket.city
+      });
+
       setCreatedTicket(ticket);
     } catch (err) {
-      setErrorMsg('Failed to register service ticket. Please call 9820370015 directly.');
+      setErrorMsg('Failed to register request. Please call 9820370015 directly.');
     } finally {
       setIsSubmitting(false);
     }
@@ -153,62 +181,94 @@ function ServiceRequestForm() {
 
   const popularBrands = [
     'Philips Respironics',
-    'DeVilbiss',
-    'Inogen',
-    'Nidek Medical',
+    'DeVilbiss Healthcare',
+    'Inogen One',
+    'Yuwell',
+    'Evox',
     'BMC Medical',
     'Oxymed',
-    'Evox',
-    'Yuwell',
+    'Nidek Medical',
     'Invacare',
     'AirSep',
     'Other / Unlisted'
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7FAFC]">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       <Navbar />
 
       <main className="flex-grow py-10 lg:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1677FF] text-xs font-bold uppercase tracking-wider mb-2">
-              <Wrench className="w-3.5 h-3.5" />
-              Online Service Booking
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F33] tracking-tight">
-              Request Equipment Service
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
+              {bookingMode === 'repair' ? 'Biomedical Workshop Service' : 'Sanitized Machine Rental Dispatch'}
+            </span>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2.5 tracking-tight">
+              {bookingMode === 'repair' ? 'Book Oxygen Concentrator Repair' : 'Reserve an Oxygen Machine on Rent'}
             </h1>
-            <p className="text-sm text-slate-600 mt-2">
-              Submit your medical oxygen machine or concentrator details. You will receive an instant Service ID to track diagnosis, estimates, and testing in real-time.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Fast doorstep service across Mumbai, Pune, and Lucknow. You will receive an instant Service Ticket ID.
             </p>
           </div>
 
+          {/* Mode Switcher Banner */}
+          {!createdTicket && (
+            <div className="flex items-center p-1 bg-slate-200/80 rounded-2xl mb-8">
+              <button
+                type="button"
+                onClick={() => setBookingMode('repair')}
+                className={`flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                  bookingMode === 'repair'
+                    ? 'bg-[#0284c7] text-white shadow-md'
+                    : 'text-slate-700 hover:text-slate-900'
+                }`}
+                id="btn-mode-repair"
+              >
+                <Wrench className="w-4 h-4" />
+                <span>🛠️ Repair My Machine</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setBookingMode('rent')}
+                className={`flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                  bookingMode === 'rent'
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 hover:text-slate-900'
+                }`}
+                id="btn-mode-rent"
+              >
+                <Package className="w-4 h-4" />
+                <span>📦 Rent a Machine</span>
+              </button>
+            </div>
+          )}
+
           {/* Success Screen if Created */}
           {createdTicket ? (
-            <div className="bg-white rounded-3xl p-8 border border-emerald-200 shadow-xl space-y-6 animate-in zoom-in-95 duration-200">
-              <div className="text-center space-y-3">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
-                  <CheckCircle2 className="w-10 h-10" />
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-200 shadow-xl space-y-6 animate-in zoom-in-95 duration-200">
+              <div className="text-center space-y-2.5">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                  Service Request Successfully Received
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  {bookingMode === 'rent' ? 'Rental Request Received' : 'Repair Request Received'}
                 </span>
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Ticket Generated: <span className="text-[#1677FF] font-mono">{createdTicket.serviceId}</span>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                  Ticket ID: <span className="text-sky-600 font-mono">{createdTicket.serviceId}</span>
                 </h2>
                 <p className="text-xs text-slate-500">
-                  A confirmation summary has been registered for {createdTicket.customerName}.
+                  Registered for <strong>{createdTicket.customerName}</strong> in <strong>{createdTicket.city}</strong>.
                 </p>
               </div>
 
               {/* Ticket Details Summary Card */}
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-3 text-xs">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-3 border-b border-slate-200">
+              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3 text-xs">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pb-3 border-b border-slate-200">
                   <div>
                     <span className="text-slate-400 font-medium">Service ID:</span>
-                    <p className="font-bold font-mono text-slate-900 text-sm">{createdTicket.serviceId}</p>
+                    <p className="font-bold font-mono text-slate-900">{createdTicket.serviceId}</p>
                   </div>
                   <div>
                     <span className="text-slate-400 font-medium">Customer:</span>
@@ -219,281 +279,232 @@ function ServiceRequestForm() {
                     <p className="font-bold text-slate-900">{createdTicket.mobileNumber}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-medium">Branch:</span>
-                    <p className="font-bold text-[#1677FF]">{createdTicket.city} ({createdTicket.branchId})</p>
+                    <span className="text-slate-400 font-medium">Branch Hub:</span>
+                    <p className="font-bold text-sky-600">{createdTicket.city}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div>
-                    <span className="text-slate-400 font-medium">Equipment & Model:</span>
-                    <p className="font-bold text-slate-800">{createdTicket.brand} {createdTicket.modelNumber} ({createdTicket.equipmentType})</p>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 font-medium">Reported Problem:</span>
-                    <p className="font-bold text-slate-800">{createdTicket.problemSummary}</p>
-                  </div>
+                <div className="pt-1">
+                  <span className="text-slate-400 font-medium">Summary:</span>
+                  <p className="font-bold text-slate-800 mt-0.5">{createdTicket.problemSummary}</p>
                 </div>
-
-                <div className="pt-2">
-                  <span className="text-slate-400 font-medium">Current Status:</span>
-                  <span className="ml-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-blue-100 text-[#1677FF] font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1677FF] animate-ping" />
-                    {createdTicket.status}
-                  </span>
-                </div>
-              </div>
-
-              {/* Next Steps Guidance */}
-              <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2 text-xs text-slate-700">
-                <p className="font-bold text-slate-900 text-sm">Next Steps:</p>
-                <ol className="list-decimal list-inside space-y-1 text-slate-600">
-                  <li>Our technician at the <strong>{createdTicket.city}</strong> facility will verify equipment intake details.</li>
-                  <li>You can drop off the unit or coordinate pickup via the phone numbers below.</li>
-                  <li>Track live diagnostic progress and approve your itemized estimate using your Service ID.</li>
-                </ol>
               </div>
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
                 <Link
-                  href={`/track-service?id=${createdTicket.serviceId}&phone=${createdTicket.mobileNumber}`}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
+                  href="/"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
                 >
-                  <Search className="w-4 h-4" />
-                  <span>Open Live Service Tracker</span>
+                  <Home className="w-4 h-4" />
+                  <span>Return to Homepage</span>
                 </Link>
 
                 <a
-                  href={`https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=Hello%20Oxygen%20Services%2C%20I%20have%20submitted%20service%20ticket%20${createdTicket.serviceId}%20for%20my%20${encodeURIComponent(createdTicket.brand)}%20${encodeURIComponent(createdTicket.modelNumber)}%20in%20${createdTicket.city}.`}
+                  href={`https://wa.me/919820370015?text=Hello%20Oxy%20Breath%20Services%2C%20I%20have%20submitted%20ticket%20${createdTicket.serviceId}%20for%20${encodeURIComponent(createdTicket.customerName)}%20in%20${createdTicket.city}.`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  <span>Send Ticket to WhatsApp</span>
+                  <span>Confirm on WhatsApp</span>
                 </a>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCreatedTicket(null);
-                    setFormData({
-                      customerName: '',
-                      mobileNumber: '',
-                      whatsappNumber: '',
-                      email: '',
-                      city: 'Mumbai',
-                      branchId: 'mumbai',
-                      equipmentType: 'Oxygen Concentrator',
-                      brand: '',
-                      modelNumber: '',
-                      problemSummary: '',
-                      serviceType: 'Bench Diagnostic',
-                      preferredDate: '',
-                      fulfillmentType: 'Branch Drop-off',
-                      address: '',
-                      photoUrl: '',
-                      additionalMessage: ''
-                    });
-                    setSelectedProblems([]);
-                    setPhotoPreview(null);
-                  }}
-                  className="text-xs font-semibold text-slate-500 hover:text-slate-900 underline"
-                >
-                  Book Another Device
-                </button>
               </div>
             </div>
           ) : (
-            /* Multi-Step Interactive Form */
-            <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl space-y-8">
+            /* Main Form */
+            <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
               {errorMsg && (
-                <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
+                <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                   <span>{errorMsg}</span>
                 </div>
               )}
 
-              {/* Section 1: Equipment & Fault Specification */}
-              <div className="space-y-4">
-                <div className="border-b border-slate-100 pb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#1677FF]">
-                    Step 1 of 3
+              {/* RENTAL-SPECIFIC FIELDS */}
+              {bookingMode === 'rent' && (
+                <div className="space-y-4 bg-emerald-50/50 p-5 rounded-2xl border border-emerald-200/60">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                    Step 1: Rental Equipment & Duration
                   </span>
-                  <h2 className="text-lg font-bold text-slate-900">
-                    What equipment needs service?
-                  </h2>
-                </div>
 
-                {/* Equipment Type Selector */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    { id: 'Oxygen Concentrator', label: 'Oxygen Concentrator (5L/10L)' },
-                    { id: 'Oxygen Machine', label: 'Oxygen Machine' },
-                    { id: 'Portable Oxygen Concentrator', label: 'Portable POC' },
-                    { id: 'Medical Oxygen Equipment', label: 'Other O2 Equipment' }
-                  ].map((item) => (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      Select Concentrator Machine on Rent:
+                    </label>
+                    <select
+                      value={formData.rentalEquipment}
+                      onChange={(e) => setFormData({ ...formData, rentalEquipment: e.target.value })}
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    >
+                      <option value="5L Stationary Concentrator (Philips EverFlo) - ₹3,500/mo">
+                        5 LPM Stationary (Philips EverFlo / DeVilbiss) - ₹3,500/mo
+                      </option>
+                      <option value="10L High Flow Machine (Heavy Duty) - ₹6,500/mo">
+                        10 LPM High Flow Machine (Dual Patient / High Flow) - ₹6,500/mo
+                      </option>
+                      <option value="Portable Oxygen Concentrator POC (Inogen One) - ₹8,500/mo">
+                        Portable Oxygen Concentrator POC (Inogen One G3/G5) - ₹8,500/mo
+                      </option>
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Rental Duration:
+                      </label>
+                      <select
+                        value={formData.rentalDuration}
+                        onChange={(e) => setFormData({ ...formData, rentalDuration: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      >
+                        <option value="7 Days">7 Days (Short Term)</option>
+                        <option value="15 Days">15 Days</option>
+                        <option value="1 Month">1 Month (Most Popular)</option>
+                        <option value="Long Term">2+ Months</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Required Delivery Date:
+                      </label>
+                      <input
+                        type="date"
+                        value={formData.preferredDate}
+                        onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* REPAIR-SPECIFIC FIELDS */}
+              {bookingMode === 'repair' && (
+                <div className="space-y-4 bg-sky-50/50 p-5 rounded-2xl border border-sky-200/60">
+                  <span className="text-xs font-bold uppercase tracking-wider text-sky-800">
+                    Step 1: Your Equipment & Problem
+                  </span>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Equipment Brand:
+                      </label>
+                      <select
+                        value={formData.brand}
+                        onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      >
+                        <option value="">Select Brand...</option>
+                        {popularBrands.map((b) => (
+                          <option key={b} value={b}>{b}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Model / Capacity:
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. EverFlo 5L, 525DS, Inogen G5..."
+                        value={formData.modelNumber}
+                        onChange={(e) => setFormData({ ...formData, modelNumber: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      Select Observed Issues:
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {COMMON_PROBLEMS.slice(0, 6).map((prob) => {
+                        const isSelected = selectedProblems.includes(prob.title);
+                        return (
+                          <button
+                            key={prob.id}
+                            type="button"
+                            onClick={() => toggleProblemSelection(prob.title)}
+                            className={`p-2 rounded-xl border text-[11px] font-semibold text-left transition cursor-pointer ${
+                              isSelected
+                                ? 'bg-sky-100 text-sky-800 border-sky-400 font-bold'
+                                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            <span className="block truncate">{prob.title}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Problem Details / Error Code: *
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Describe symptoms, purity alarm color, or beeping..."
+                      value={formData.problemSummary}
+                      onChange={(e) => setFormData({ ...formData, problemSummary: e.target.value })}
+                      className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* LOCATION & FULFILLMENT */}
+              <div className="space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Step 2: Service Location
+                </span>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {(['Mumbai', 'Pune', 'Lucknow'] as const).map((c) => (
                     <button
-                      key={item.id}
+                      key={c}
                       type="button"
-                      onClick={() => setFormData({ ...formData, equipmentType: item.id as any })}
-                      className={`p-3.5 rounded-xl border text-xs font-bold text-left transition ${
-                        formData.equipmentType === item.id
-                          ? 'bg-[#0B1F33] text-white border-[#0B1F33] shadow'
+                      onClick={() => handleCityChange(c)}
+                      className={`p-3 rounded-2xl border text-xs font-bold text-center transition cursor-pointer ${
+                        formData.city === c
+                          ? 'bg-[#0A192F] text-white border-[#0A192F] shadow-sm'
                           : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
                       }`}
                     >
-                      {item.label}
+                      <MapPin className="w-4 h-4 mx-auto mb-1 text-sky-400" />
+                      <span>{c}</span>
                     </button>
                   ))}
                 </div>
 
-                {/* Brand & Model */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Equipment Brand / Manufacturer:
-                    </label>
-                    <select
-                      value={formData.brand}
-                      onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    >
-                      <option value="">Select Brand...</option>
-                      {popularBrands.map((b) => (
-                        <option key={b} value={b}>{b}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Model Number / Capacity (Optional):
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. EverFlo 5L, 525DS, Inogen G5..."
-                      value={formData.modelNumber}
-                      onChange={(e) => setFormData({ ...formData, modelNumber: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Visual Problem Symptoms Selector */}
-                <div className="pt-2">
-                  <label className="block text-xs font-bold text-slate-700 mb-2">
-                    What is the observed problem / fault? (Select all that apply)
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {COMMON_PROBLEMS.map((prob) => {
-                      const isSelected = selectedProblems.includes(prob.title);
-                      return (
-                        <button
-                          key={prob.id}
-                          type="button"
-                          onClick={() => toggleProblemSelection(prob.title)}
-                          className={`p-2.5 rounded-xl border text-[11px] font-semibold text-left transition ${
-                            isSelected
-                              ? 'bg-blue-50 text-[#1677FF] border-[#1677FF] ring-1 ring-[#1677FF]'
-                              : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-                          }`}
-                        >
-                          <span className="block truncate">{prob.title}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Problem Summary Input */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Problem Summary / Description: *
+                    Doorstep Delivery / Pickup Address:
                   </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Describe specific symptoms, alarm sounds, or error codes..."
-                    value={formData.problemSummary}
-                    onChange={(e) => setFormData({ ...formData, problemSummary: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    required
+                  <input
+                    type="text"
+                    placeholder="Building name, Flat no, Landmark / Area..."
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Section 2: Branch & Fulfillment Preference */}
-              <div className="space-y-4 pt-2">
-                <div className="border-b border-slate-100 pb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#1677FF]">
-                    Step 2 of 3
-                  </span>
-                  <h2 className="text-lg font-bold text-slate-900">
-                    Service Location & Branch
-                  </h2>
-                </div>
+              {/* CONTACT DETAILS */}
+              <div className="space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Step 3: Contact Details
+                </span>
 
-                {/* City Tabs */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Select Nearest Branch City: *
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {(['Mumbai', 'Pune', 'Lucknow'] as const).map((city) => (
-                      <button
-                        key={city}
-                        type="button"
-                        onClick={() => handleCityChange(city)}
-                        className={`p-3 rounded-xl border text-xs font-bold text-center transition ${
-                          formData.city === city
-                            ? 'bg-[#0B1F33] text-white border-[#0B1F33] shadow'
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-                        }`}
-                      >
-                        <MapPin className="w-3.5 h-3.5 mx-auto mb-1 text-[#19C6D9]" />
-                        <span>{city}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Fulfillment Method */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                  {[
-                    { id: 'Branch Drop-off', desc: 'Bring unit directly to workshop' },
-                    { id: 'Doorstep Pickup', desc: 'Coordinate pickup courier / rider' },
-                    { id: 'Technician Visit', desc: 'On-site clinical / clinic check' }
-                  ].map((mode) => (
-                    <button
-                      key={mode.id}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, fulfillmentType: mode.id as any })}
-                      className={`p-3 rounded-xl border text-left transition ${
-                        formData.fulfillmentType === mode.id
-                          ? 'bg-blue-50 text-[#1677FF] border-[#1677FF]'
-                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-                      }`}
-                    >
-                      <p className="text-xs font-bold">{mode.id}</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">{mode.desc}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Section 3: Customer Contact Information */}
-              <div className="space-y-4 pt-2">
-                <div className="border-b border-slate-100 pb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#1677FF]">
-                    Step 3 of 3
-                  </span>
-                  <h2 className="text-lg font-bold text-slate-900">
-                    Contact & Pickup Details
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
                       Full Name: *
@@ -503,7 +514,7 @@ function ServiceRequestForm() {
                       placeholder="e.g. Ramesh Patel"
                       value={formData.customerName}
                       onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                       required
                     />
                   </div>
@@ -517,110 +528,37 @@ function ServiceRequestForm() {
                       placeholder="10-digit mobile number"
                       value={formData.mobileNumber}
                       onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                       required
                     />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      WhatsApp Number:
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="Optional if same as mobile"
-                      value={formData.whatsappNumber}
-                      onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Email Address:
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="e.g. user@domain.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Address / Area Landmark (for pickup or visit):
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Flat 302, Green Heights, Andheri West / Kothrud / Chinhat..."
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                {/* Photo Upload */}
-                <div className="pt-2">
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Upload Equipment / Error Display Photo (Optional):
-                  </label>
-                  <div className="border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center hover:border-blue-400 transition bg-slate-50/50">
-                    {photoPreview ? (
-                      <div className="space-y-2">
-                        <div className="relative w-40 h-32 mx-auto">
-                          <Image
-                            src={photoPreview}
-                            alt="Equipment preview"
-                            fill
-                            unoptimized
-                            className="rounded-lg object-contain border border-slate-200"
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setPhotoPreview(null);
-                            setFormData((prev) => ({ ...prev, photoUrl: '' }));
-                          }}
-                          className="text-xs text-red-600 font-bold hover:underline"
-                        >
-                          Remove Photo
-                        </button>
-                      </div>
-                    ) : (
-                      <label className="cursor-pointer block">
-                        <Upload className="w-6 h-6 text-slate-400 mx-auto mb-1" />
-                        <span className="text-xs font-bold text-[#1677FF]">Click to upload photo</span>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">PNG, JPG, WEBP up to 5MB</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handlePhotoUpload}
-                          className="hidden"
-                        />
-                      </label>
-                    )}
                   </div>
                 </div>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              {/* SUBMIT BUTTON */}
+              <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p className="text-xs text-slate-500">
-                  By submitting, you agree to technical diagnostic assessment by Oxygen Services.
+                  {bookingMode === 'rent' ? 'No advance payment needed until delivery.' : 'Free inspection estimate provided before repair.'}
                 </p>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-8 py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-500/25 transition disabled:opacity-50"
-                  id="submit-service-request-btn"
+                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 text-white px-8 py-3.5 rounded-xl font-bold text-sm shadow-lg transition cursor-pointer disabled:opacity-50 ${
+                    bookingMode === 'rent'
+                      ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/20'
+                      : 'bg-[#0284c7] hover:bg-[#0369a1] shadow-sky-500/20'
+                  }`}
+                  id="btn-submit-form"
                 >
-                  <Wrench className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Generating Ticket...' : 'Submit Service Request'}</span>
+                  {bookingMode === 'rent' ? <Package className="w-4 h-4" /> : <Wrench className="w-4 h-4" />}
+                  <span>
+                    {isSubmitting
+                      ? 'Registering Ticket...'
+                      : bookingMode === 'rent'
+                      ? 'Confirm Rental Reservation'
+                      : 'Submit Repair Request'}
+                  </span>
                 </button>
               </div>
             </form>

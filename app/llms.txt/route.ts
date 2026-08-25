@@ -3,10 +3,10 @@ import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 import { SERVICES } from '@/lib/data/services';
 
 export async function GET() {
-  const content = `# Oxygen Services — Technical Service & Repair for Medical Oxygen Equipment
+  const content = `# Oxy Breath Services — Technical Service & Repair for Medical Oxygen Equipment
 
 ## Overview
-Oxygen Services is a specialist, vendor-independent medical oxygen equipment service and repair provider in India. The company diagnoses, services, repacks, and overhauls stationary oxygen machines, oxygen concentrators, and portable oxygen concentrators (POCs).
+Oxy Breath Services is a specialist, vendor-independent medical oxygen equipment service and repair provider in India. The company diagnoses, services, repacks, and overhauls stationary oxygen machines, oxygen concentrators, and portable oxygen concentrators (POCs).
 
 ## Core Capabilities
 - Calibrated Ultrasonic Oxygen Purity (% O2) Testing & Bench Diagnostics
@@ -33,7 +33,7 @@ Oxygen Services is a specialist, vendor-independent medical oxygen equipment ser
    WhatsApp: +91 9820370015
 
 ## Service Tracking & Customer Workflow
-1. Request Submitted (Online, Phone, or WhatsApp) -> Unique Service ID generated (e.g. OS-2026-000123)
+1. Request Submitted (Online, Phone, or WhatsApp) -> Unique Service ID generated (e.g. OBS-2026-000123)
 2. Diagnostic Assessment on calibrated test benches
 3. Itemized estimate presented to customer for approval
 4. Component repair & repacking
@@ -41,7 +41,7 @@ Oxygen Services is a specialist, vendor-independent medical oxygen equipment ser
 6. Ready for dispatch / delivery with technical service report
 
 ## Medical Disclaimer
-Oxygen Services repairs and services medical equipment; it does not diagnose or treat patients. Always maintain backup oxygen cylinders during equipment service.
+Oxy Breath Services repairs and services medical equipment; it does not diagnose or treat patients. Always maintain backup oxygen cylinders during equipment service.
 `;
 
   return new NextResponse(content, {

@@ -7,8 +7,8 @@ import Footer from '@/components/layout/Footer';
 import MobileStickyBar from '@/components/layout/MobileStickyBar';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service & Equipment Repair Agreement | Oxygen Services',
-  description: 'Terms and conditions governing diagnostics, equipment intake, estimate authorization, repair warranties, and storage policies.'
+  title: 'Terms of Service & Equipment Repair Agreement | Oxy Breath Services',
+  description: 'Terms and conditions governing diagnostics, equipment intake, estimate authorization, repair warranties, and storage policies by Oxy Breath Services.'
 };
 
 export default function TermsPage() {
@@ -23,7 +23,7 @@ export default function TermsPage() {
               <FileText className="w-8 h-8 text-[#1677FF]" />
               <div>
                 <h1 className="text-2xl font-extrabold text-[#0B1F33]">Terms of Service</h1>
-                <p className="text-xs text-slate-500">Effective Date: January 1, 2026 • Oxygen Services</p>
+                <p className="text-xs text-slate-500">Effective Date: January 1, 2026 • Oxy Breath Services</p>
               </div>
             </div>
 

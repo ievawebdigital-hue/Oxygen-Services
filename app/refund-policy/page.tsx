@@ -7,8 +7,8 @@ import Footer from '@/components/layout/Footer';
 import MobileStickyBar from '@/components/layout/MobileStickyBar';
 
 export const metadata: Metadata = {
-  title: 'Refund & Cancellation Policy | Oxygen Services',
-  description: 'Cancellation and refund policies for diagnostic charges, parts replacement, and preventive maintenance packages.'
+  title: 'Refund & Cancellation Policy | Oxy Breath Services',
+  description: 'Cancellation and refund policies for diagnostic charges, parts replacement, and preventive maintenance packages by Oxy Breath Services.'
 };
 
 export default function RefundPolicyPage() {
@@ -23,7 +23,7 @@ export default function RefundPolicyPage() {
               <CreditCard className="w-8 h-8 text-[#1677FF]" />
               <div>
                 <h1 className="text-2xl font-extrabold text-[#0B1F33]">Refund & Cancellation Policy</h1>
-                <p className="text-xs text-slate-500">Oxygen Services</p>
+                <p className="text-xs text-slate-500">Oxy Breath Services</p>
               </div>
             </div>
 

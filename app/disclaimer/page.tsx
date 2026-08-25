@@ -8,9 +8,9 @@ import MobileStickyBar from '@/components/layout/MobileStickyBar';
 import { COMPANY_CONTACT } from '@/lib/data/branches';
 
 export const metadata: Metadata = {
-  title: 'Medical Safety Disclaimer & Emergency Notice | Oxygen Services',
-  description: 'Important biomedical equipment safety disclaimer, non-emergency service guidelines, and clinical backup advisories for Oxygen Services.',
-  keywords: ['medical equipment disclaimer', 'oxygen concentrator safety notice']
+  title: 'Medical Safety Disclaimer & Emergency Notice | Oxy Breath Services',
+  description: 'Important biomedical equipment safety disclaimer, non-emergency service guidelines, and clinical backup advisories for Oxy Breath Services.',
+  keywords: ['medical equipment disclaimer', 'oxygen concentrator safety notice', 'Oxy Breath Services']
 };
 
 export default function DisclaimerPage() {
@@ -42,7 +42,7 @@ export default function DisclaimerPage() {
                 Emergency Medical Notice:
               </p>
               <p className="leading-relaxed">
-                Oxygen Services provides technical maintenance, diagnostic benchmarking, and component repair for medical oxygen hardware. We are an equipment engineering service provider and do <strong>NOT</strong> provide emergency healthcare, medical diagnosis, clinical prescriptions, or emergency oxygen supply.
+                Oxy Breath Services provides technical maintenance, diagnostic benchmarking, and component repair for medical oxygen hardware. We are an equipment engineering service provider and do <strong>NOT</strong> provide emergency healthcare, medical diagnosis, clinical prescriptions, or emergency oxygen supply.
               </p>
               <p className="font-bold text-red-900 pt-1">
                 If a patient experiences severe acute hypoxemia, respiratory distress, or sudden equipment failure, please immediately switch to an emergency backup medical oxygen cylinder or contact local emergency ambulance services (108 / 112) without delay.
@@ -74,7 +74,7 @@ export default function DisclaimerPage() {
                   3. Independent Service Provider Status
                 </h2>
                 <p>
-                  Oxygen Services is a vendor-independent biomedical technical service organization. All third-party trademarks, brand names, and model references (including Philips Respironics, DeVilbiss, Inogen, Nidek, BMC, Oxymed, Evox, Yuwell, Invacare, AirSep) are the properties of their respective trademark holders and are utilized strictly for equipment identification and compatibility purposes.
+                  Oxy Breath Services is a vendor-independent biomedical technical service organization. All third-party trademarks, brand names, and model references (including Philips Respironics, DeVilbiss, Inogen, Nidek, BMC, Oxymed, Evox, Yuwell, Invacare, AirSep) are the properties of their respective trademark holders and are utilized strictly for equipment identification and compatibility purposes.
                 </p>
               </section>
 

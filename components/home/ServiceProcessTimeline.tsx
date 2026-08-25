@@ -1,91 +1,87 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import {
   FileCheck2,
-  Cpu,
-  Calculator,
-  Wrench,
+  Truck,
   Activity,
-  ArrowRight
+  ShieldCheck,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
 const PROCESS_STEPS = [
   {
     step: '01',
-    title: 'Submit Service Request',
-    subtitle: 'Online, WhatsApp, or Phone',
-    description: 'Provide your equipment brand, model, and reported fault. Instantly receive your unique Service ID (e.g. OS-2026-000123).',
+    title: 'Book Online or Call',
+    subtitle: 'Takes 30 Seconds',
+    description: 'Select your machine issue or choose a rental package. Instantly receive your digital Service Ticket ID.',
     icon: FileCheck2
   },
   {
     step: '02',
-    title: 'Equipment & Problem Assessment',
-    subtitle: 'Drop-off, Pickup, or Visit',
-    description: 'Our biomedical technicians conduct initial electrical safety and internal particulate intake verification at our branch.',
-    icon: Cpu
+    title: 'Doorstep Pickup / Delivery',
+    subtitle: 'Same-Day Dispatch',
+    description: 'Our logistics agent collects your repair machine safely or delivers a sanitized rental unit to your home/clinic.',
+    icon: Truck
   },
   {
     step: '03',
-    title: 'Diagnosis & Itemized Estimate',
-    subtitle: 'Ultrasonic & Pressure Analysis',
-    description: 'We test oxygen purity (%), compressor PSIG, and valve timing, then generate a transparent estimate for your online approval.',
-    icon: Calculator
+    title: 'Biomedical Testing & Repair',
+    subtitle: '95%+ Purity QC',
+    description: 'Technicians repack sieve columns, service compressors, and conduct multi-hour calibrated purity burn-in testing.',
+    icon: Activity
   },
   {
     step: '04',
-    title: 'Component Repair / Maintenance',
-    subtitle: 'Sieve Repack & Overhaul',
-    description: 'Upon approval, technicians repack molecular sieve canisters, replace HEPA/bacterial filters, or service compressor cups.',
-    icon: Wrench
-  },
-  {
-    step: '05',
-    title: 'Testing & Service Completion',
-    subtitle: '24-Hour Continuous Burn-In',
-    description: 'The unit undergoes a 24-hour continuous runtime purity stability test. Delivered with a signed technical service report.',
-    icon: Activity
+    title: 'Return with Test Report',
+    subtitle: 'Warranty Included',
+    description: 'Your machine is sanitized, packed, and returned with an itemized digital test certificate and warranty on parts.',
+    icon: ShieldCheck
   }
 ];
 
 export default function ServiceProcessTimeline() {
   return (
-    <section className="py-16 lg:py-24 bg-white border-b border-slate-200">
+    <section className="py-14 lg:py-20 bg-slate-50 border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#1677FF]">
-            Transparent 5-Stage Workflow
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-100/70 px-3 py-1 rounded-full border border-sky-200/60 inline-flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Simple 4-Step Process</span>
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F33] mt-1">
-            How Our Service & Repair Process Works
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2.5 tracking-tight">
+            How Oxy Breath Services Works
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 mt-2">
-            Every oxygen concentrator and oxygen machine entrusted to us follows a rigorous technical workflow with live digital status tracking.
+          <p className="text-sm sm:text-base text-slate-600 mt-1 leading-relaxed">
+            Fast, transparent, and hassle-free service for repairs and rentals across Mumbai, Pune, and Lucknow.
           </p>
         </div>
 
-        {/* 5-Step Process Timeline Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+        {/* 4-Step Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {PROCESS_STEPS.map((step, idx) => {
             const Icon = step.icon;
             return (
               <div
                 key={idx}
-                className="bg-slate-50/90 rounded-2xl p-5 border border-slate-200/90 flex flex-col justify-between hover:border-blue-300 hover:shadow-lg transition-all group"
+                className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xl font-extrabold font-mono text-[#1677FF] group-hover:text-[#0B1F33] transition">
+                    <span className="text-2xl font-extrabold font-mono text-sky-600 group-hover:text-slate-900 transition">
                       {step.step}
                     </span>
-                    <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-[#1677FF] flex items-center justify-center group-hover:bg-[#1677FF] group-hover:text-white transition">
+                    <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:bg-[#0284c7] group-hover:text-white transition shadow-xs">
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>
 
-                  <h3 className="text-sm font-bold text-slate-900 mb-1">
+                  <h3 className="text-base font-extrabold text-slate-900 mb-1">
                     {step.title}
                   </h3>
-                  <p className="text-xs font-semibold text-[#1677FF] mb-2">
+                  <p className="text-xs font-bold text-sky-600 mb-2.5">
                     {step.subtitle}
                   </p>
                   <p className="text-xs text-slate-600 leading-relaxed">
@@ -93,22 +89,22 @@ export default function ServiceProcessTimeline() {
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-bold text-slate-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Digitally Logged</span>
+                  <span>Real-Time Tracked</span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom Timeline Action */}
-        <div className="mt-12 text-center">
+        {/* Bottom CTA */}
+        <div className="mt-10 text-center">
           <Link
             href="/request-service"
-            className="inline-flex items-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-md transition transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-md transition transform hover:-translate-y-0.5"
           >
-            <span>Start a Service Request</span>
+            <span>Book Repair or Rent Machine</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

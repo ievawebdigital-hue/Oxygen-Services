@@ -1,239 +1,371 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Wrench,
-  MessageSquare,
-  Search,
+  Package,
   Phone,
-  CheckCircle,
-  MapPin,
-  Activity,
-  Wind,
-  ShieldCheck,
-  Zap,
-  ArrowRight
+  MessageSquare,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  ArrowRight,
+  CheckCircle2
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { COMPANY_CONTACT } from '@/lib/data/branches';
 
+// Import generated hero slider images
+import heroRepairLab from '@/src/assets/images/hero_repair_lab_1787421415668.jpg';
+import heroRentalFleet from '@/src/assets/images/hero_rental_fleet_1787421429568.jpg';
+import heroPurityTest from '@/src/assets/images/hero_purity_test_1787421441811.jpg';
+import heroDoorstepService from '@/src/assets/images/hero_doorstep_service_1787421458147.jpg';
+
+interface HeroSlide {
+  id: number;
+  tag: string;
+  headline: string;
+  highlightedText: string;
+  subhead: string;
+  image: any;
+  alt: string;
+  highlights: string[];
+  primaryCta: { label: string; href: string; icon: any };
+  secondaryCta: { label: string; href: string; icon: any; isCall?: boolean; isWhatsApp?: boolean };
+}
+
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 1,
+    tag: 'Biomedical Repair Laboratory',
+    headline: 'Oxygen Concentrator Repair & ',
+    highlightedText: 'Sieve Bed Repours',
+    subhead: 'Specialist molecular sieve zeolite repours, compressor rebuilding, and circuit board servicing. Restoring 95%+ medical oxygen purity for Philips, DeVilbiss, Inogen, and Yuwell.',
+    image: heroRepairLab,
+    alt: 'Biomedical laboratory technician repairing medical oxygen concentrator',
+    highlights: ['95%±3% Purity Calibration', 'Genuine Zeolite Repours', '24-48 Hr Turnaround'],
+    primaryCta: {
+      label: 'Book Repair Service',
+      href: '/request-service?mode=repair',
+      icon: Wrench,
+    },
+    secondaryCta: {
+      label: 'Call: 9820370015',
+      href: `tel:+91${COMPANY_CONTACT.primaryPhone}`,
+      icon: Phone,
+      isCall: true,
+    },
+  },
+  {
+    id: 2,
+    tag: 'Sanitized Rental Fleet',
+    headline: 'Rent 5L, 10L & Portable POC ',
+    highlightedText: 'From ₹3,500/Month',
+    subhead: 'Pristine, 100% sanitized medical oxygen concentrators delivered same-day to your residence in Mumbai, Pune, and Lucknow with complete sterile accessories.',
+    image: heroRentalFleet,
+    alt: 'Fleet of sanitized 5L, 10L, and portable oxygen concentrators ready for rent',
+    highlights: ['5L & 10L High Flow Units', 'Portable Battery POCs', 'Free Cannula & Bottle'],
+    primaryCta: {
+      label: 'Book Concentrator Service',
+      href: '/request-service?mode=repair',
+      icon: Wrench,
+    },
+    secondaryCta: {
+      label: 'WhatsApp for Rates',
+      href: COMPANY_CONTACT.whatsappUrl,
+      icon: MessageSquare,
+      isWhatsApp: true,
+    },
+  },
+  {
+    id: 3,
+    tag: 'Clinical Quality Assurance',
+    headline: 'Guaranteed 95%±3% Purity With ',
+    highlightedText: 'Ultrasonic Calibration',
+    subhead: 'Every repaired machine undergoes continuous 2-hour burn-in testing and digital acoustic analyzer verification with a signed QC test report.',
+    image: heroPurityTest,
+    alt: 'Biomedical ultrasonic oxygen analyzer displaying verified purity level',
+    highlights: ['Digital Acoustic Testing', 'Signed QC Purity Certificate', 'Immediate Swap Warranty'],
+    primaryCta: {
+      label: 'About Our Quality Protocols',
+      href: '/about',
+      icon: CheckCircle2,
+    },
+    secondaryCta: {
+      label: 'Chat on WhatsApp',
+      href: COMPANY_CONTACT.whatsappUrl,
+      icon: MessageSquare,
+      isWhatsApp: true,
+    },
+  },
+  {
+    id: 4,
+    tag: 'Mumbai • Pune • Lucknow Hubs',
+    headline: 'Fast Doorstep Pickup & Delivery ',
+    highlightedText: 'Across 3 Major Regions',
+    subhead: 'Our dedicated biomedical field engineers provide rapid doorstep machine pickup, hospital room delivery, and on-site demonstrations in Mumbai MMR, Pune PCMC, and Lucknow.',
+    image: heroDoorstepService,
+    alt: 'Biomedical service delivery engineer delivering oxygen concentrator',
+    highlights: ['Mumbai Hub (Mira Road)', 'Pune Hub (Mangalwar Peth)', 'Lucknow Hub (Chinhat)'],
+    primaryCta: {
+      label: 'View Workshop Hubs',
+      href: '/contact',
+      icon: ArrowRight,
+    },
+    secondaryCta: {
+      label: 'Call Helpline: 9820370015',
+      href: `tel:+91${COMPANY_CONTACT.primaryPhone}`,
+      icon: Phone,
+      isCall: true,
+    },
+  },
+];
+
+const AUTO_PLAY_INTERVAL = 5500; // 5.5 seconds per slide
+
 export default function HeroSection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const totalSlides = HERO_SLIDES.length;
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  }, [totalSlides]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  }, [totalSlides]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // Auto-play timer logic with smooth progress bar
+  useEffect(() => {
+    if (!isPlaying || isHovered) {
+      return;
+    }
+
+    const stepMs = 50;
+    const totalSteps = AUTO_PLAY_INTERVAL / stepMs;
+    let currentStep = 0;
+
+    const interval = setInterval(() => {
+      currentStep += 1;
+      const pct = Math.min(100, (currentStep / totalSteps) * 100);
+      setProgress(pct);
+
+      if (currentStep >= totalSteps) {
+        currentStep = 0;
+        setProgress(0);
+        setCurrentSlide((prev) => (prev + 1) % totalSlides);
+      }
+    }, stepMs);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isPlaying, isHovered, totalSlides, currentSlide]);
+
+  const activeSlide = HERO_SLIDES[currentSlide];
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-[#0B1F33] to-[#0D243D] text-white pt-10 pb-16 lg:pt-16 lg:pb-24">
-      {/* Background Subtle Flow Grid Graphic */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#19C6D9" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#hero-grid)" />
-        </svg>
+    <section
+      id="hero-slider-section"
+      className="relative overflow-hidden bg-slate-950 text-white min-h-[520px] sm:min-h-[580px] lg:min-h-[640px] flex flex-col justify-between"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      aria-label="Oxy Breath Services Hero Slider"
+    >
+      {/* Full-Bleed Clear Background Image Carousel */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSlide.id}
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={activeSlide.image}
+              alt={activeSlide.alt}
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="100vw"
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Lightweight, Transparent Gradient Overlay to keep image clear while keeping text readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30 z-10" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column: Messaging & CTAs (7 Cols) */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-[#19C6D9]/30 text-[#19C6D9] text-xs font-bold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-[#19C6D9] animate-pulse" />
-              SPECIALIST MEDICAL OXYGEN EQUIPMENT SERVICE
-            </div>
+      {/* Floating Prev / Next Navigation Arrows on the Sides */}
+      <button
+        type="button"
+        onClick={prevSlide}
+        aria-label="Previous slide"
+        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-slate-900/60 hover:bg-[#0284c7] text-white border border-white/20 backdrop-blur-md items-center justify-center transition shadow-lg cursor-pointer"
+        id="hero-slider-left-arrow"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
 
-            {/* Main H1 Heading */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Oxygen Machine & Oxygen Concentrator Service{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#19C6D9] via-[#1677FF] to-blue-400">
-                You Can Rely On
-              </span>
-            </h1>
+      <button
+        type="button"
+        onClick={nextSlide}
+        aria-label="Next slide"
+        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-slate-900/60 hover:bg-[#0284c7] text-white border border-white/20 backdrop-blur-md items-center justify-center transition shadow-lg cursor-pointer"
+        id="hero-slider-right-arrow"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
 
-            {/* Supporting Text */}
-            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl">
-              Professional servicing, repair, troubleshooting and maintenance support for oxygen machines, oxygen concentrators and portable oxygen equipment across <strong className="text-white font-semibold">Mumbai, Pune and Lucknow</strong>.
-            </p>
+      {/* Slide Content Overlay */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 py-12 sm:py-16 lg:py-20 w-full flex-grow flex items-center">
+        <div className="max-w-2xl sm:max-w-3xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlide.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="space-y-4 sm:space-y-5"
+            >
+              {/* Category Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-sky-400/40 text-sky-300 text-xs font-bold uppercase tracking-wider shadow-md">
+                <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+                <span>{activeSlide.tag}</span>
+              </div>
 
-            {/* Trust Pill Badges */}
-            <div className="flex flex-wrap gap-2 pt-1 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-200">
-                <MapPin className="w-3.5 h-3.5 text-[#19C6D9]" />
-                Mumbai • Pune • Lucknow
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                Vendor-Independent Service
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-200">
-                <Activity className="w-3.5 h-3.5 text-blue-400" />
-                Calibrated Purity & Pressure Testing
-              </span>
-            </div>
+              {/* Headline */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15] drop-shadow-md">
+                {activeSlide.headline}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-200">
+                  {activeSlide.highlightedText}
+                </span>
+              </h1>
 
-            {/* CTA Button Group */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4">
-              <Link
-                href="/request-service"
-                className="inline-flex items-center justify-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white text-base font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition transform hover:-translate-y-0.5"
-                id="hero-request-service-cta"
-              >
-                <Wrench className="w-5 h-5" />
-                <span>Request a Service</span>
-              </Link>
+              {/* Subheading */}
+              <p className="text-sm sm:text-base lg:text-lg text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow">
+                {activeSlide.subhead}
+              </p>
 
-              <a
-                href={COMPANY_CONTACT.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white text-base font-bold px-6 py-3.5 rounded-xl shadow-md transition transform hover:-translate-y-0.5"
-                id="hero-whatsapp-cta"
-              >
-                <MessageSquare className="w-5 h-5" />
-                <span>WhatsApp Us</span>
-              </a>
-
-              <Link
-                href="/track-service"
-                className="inline-flex items-center justify-center gap-2 bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-base font-semibold px-5 py-3.5 rounded-xl border border-slate-700 transition"
-                id="hero-track-service-cta"
-              >
-                <Search className="w-4 h-4 text-[#19C6D9]" />
-                <span>Track Service</span>
-              </Link>
-            </div>
-
-            {/* Direct Calling Strip */}
-            <div className="pt-2 flex items-center gap-3 text-sm text-slate-400">
-              <span>Urgent Equipment Assistance:</span>
-              <a
-                href={`tel:+91${COMPANY_CONTACT.primaryPhone}`}
-                className="text-white font-bold text-[#19C6D9] hover:underline inline-flex items-center gap-1"
-              >
-                <Phone className="w-4 h-4 text-[#19C6D9]" />
-                9820370015
-              </a>
-              <span>/</span>
-              <a
-                href={`tel:+91${COMPANY_CONTACT.secondaryPhone}`}
-                className="text-slate-300 hover:text-white"
-              >
-                9819459421
-              </a>
-            </div>
-          </div>
-
-          {/* Right Column: Custom Visual Diagnostic Graphic (5 Cols) */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-2xl bg-gradient-to-b from-slate-800/90 to-slate-900/90 p-6 border border-slate-700/80 shadow-2xl backdrop-blur">
-              {/* Top Card Header: Live Bench Diagnostic Status */}
-              <div className="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-white">
-                      Diagnostic Test Bench
-                    </p>
-                    <p className="text-[11px] text-slate-400">
-                      Ultrasonic Purity & Flow Analysis
-                    </p>
+              {/* Clean 3-Key Highlights Checklist */}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 pt-1 text-xs sm:text-sm font-semibold text-slate-100">
+                {activeSlide.highlights.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="inline-flex items-center gap-1.5 bg-slate-900/70 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-sky-400 flex-shrink-0" />
+                    <span>{item}</span>
                   </div>
-                </div>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-900/50 text-[#19C6D9] border border-blue-700/40">
-                  PSA Multi-Stage
-                </span>
+                ))}
               </div>
 
-              {/* Technical Schematic SVG: DEVICE -> TECHNICIAN -> SERVICE */}
-              <div className="relative bg-slate-950/70 rounded-xl p-4 border border-slate-800 overflow-hidden">
-                <svg
-                  viewBox="0 0 400 240"
-                  className="w-full h-auto"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Background Grid Lines */}
-                  <line x1="20" y1="60" x2="380" y2="60" stroke="#1E293B" strokeDasharray="3 3" />
-                  <line x1="20" y1="120" x2="380" y2="120" stroke="#1E293B" strokeDasharray="3 3" />
-                  <line x1="20" y1="180" x2="380" y2="180" stroke="#1E293B" strokeDasharray="3 3" />
-
-                  {/* Stage 1: Ambient Intake */}
-                  <rect x="25" y="70" width="70" height="95" rx="8" fill="#0F172A" stroke="#334155" strokeWidth="1.5" />
-                  <text x="60" y="95" fill="#94A3B8" fontSize="9" fontWeight="bold" textAnchor="middle">AIR INTAKE</text>
-                  <text x="60" y="110" fill="#64748B" fontSize="8" textAnchor="middle">HEPA Pre-Filter</text>
-                  <circle cx="60" cy="135" r="14" fill="#1E293B" stroke="#0EA5E9" strokeWidth="1.5" />
-                  <path d="M54 135 C57 131 63 139 66 135" stroke="#38BDF8" strokeWidth="1.5" strokeLinecap="round" />
-
-                  {/* Flow Arrow 1 */}
-                  <path d="M98 118 L130 118" stroke="#0284C7" strokeWidth="2.5" className="animate-flow" />
-                  <polygon points="132,118 126,114 126,122" fill="#0284C7" />
-
-                  {/* Stage 2: Dual Zeolite Sieve Columns */}
-                  <rect x="135" y="45" width="120" height="145" rx="10" fill="#0B1F33" stroke="#1677FF" strokeWidth="1.5" />
-                  <text x="195" y="65" fill="#38BDF8" fontSize="10" fontWeight="bold" textAnchor="middle">MOLECULAR SIEVES</text>
-                  <text x="195" y="78" fill="#94A3B8" fontSize="8" textAnchor="middle">Dual Zeolite PSA Bed</text>
-
-                  {/* Sieve Column A & B */}
-                  <rect x="148" y="90" width="40" height="75" rx="4" fill="#1E293B" stroke="#19C6D9" strokeWidth="1" />
-                  <text x="168" y="105" fill="#E2E8F0" fontSize="8" fontWeight="bold" textAnchor="middle">Bed A</text>
-                  <line x1="152" y1="115" x2="184" y2="115" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="152" y1="125" x2="184" y2="125" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="152" y1="135" x2="184" y2="135" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="152" y1="145" x2="184" y2="145" stroke="#0284C7" strokeDasharray="2 2" />
-                  <circle cx="168" cy="155" r="3" fill="#16A34A" />
-
-                  <rect x="202" y="90" width="40" height="75" rx="4" fill="#1E293B" stroke="#19C6D9" strokeWidth="1" />
-                  <text x="222" y="105" fill="#E2E8F0" fontSize="8" fontWeight="bold" textAnchor="middle">Bed B</text>
-                  <line x1="206" y1="115" x2="238" y2="115" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="206" y1="125" x2="238" y2="125" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="206" y1="135" x2="238" y2="135" stroke="#0284C7" strokeDasharray="2 2" />
-                  <line x1="206" y1="145" x2="238" y2="145" stroke="#0284C7" strokeDasharray="2 2" />
-                  <circle cx="222" cy="155" r="3" fill="#1677FF" />
-
-                  {/* Flow Arrow 2 */}
-                  <path d="M258 118 L290 118" stroke="#10B981" strokeWidth="2.5" className="animate-flow" />
-                  <polygon points="292,118 286,114 286,122" fill="#10B981" />
-
-                  {/* Stage 3: Calibrated Oxygen Output */}
-                  <rect x="295" y="70" width="80" height="95" rx="8" fill="#064E3B" stroke="#10B981" strokeWidth="1.5" />
-                  <text x="335" y="92" fill="#A7F3D0" fontSize="9" fontWeight="bold" textAnchor="middle">O2 OUTPUT</text>
-                  <text x="335" y="118" fill="#34D399" fontSize="16" fontWeight="bold" textAnchor="middle">94.2%</text>
-                  <text x="335" y="132" fill="#6EE7B7" fontSize="8" textAnchor="middle">5.0 LPM Verified</text>
-                  <path d="M320 148 L350 148" stroke="#34D399" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </div>
-
-              {/* Bottom Real-Time Diagnostic Telemetry Data */}
-              <div className="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800">
-                  <p className="text-[10px] text-slate-400 uppercase font-semibold">Purity Target</p>
-                  <p className="text-sm font-bold text-emerald-400">93% ± 3%</p>
-                </div>
-                <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800">
-                  <p className="text-[10px] text-slate-400 uppercase font-semibold">Line Pressure</p>
-                  <p className="text-sm font-bold text-blue-400">22.8 PSIG</p>
-                </div>
-                <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800">
-                  <p className="text-[10px] text-slate-400 uppercase font-semibold">Burn-In Run</p>
-                  <p className="text-sm font-bold text-[#19C6D9]">24h Stable</p>
-                </div>
-              </div>
-
-              {/* Verified Quality Tag */}
-              <div className="mt-4 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-700/60">
-                <span className="flex items-center gap-1.5 text-slate-300">
-                  <CheckCircle className="w-3.5 h-3.5 text-[#19C6D9]" />
-                  Medical Oxygen Standards
-                </span>
+              {/* Clean Call to Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-3">
                 <Link
-                  href="/track-service"
-                  className="text-[#19C6D9] hover:underline font-semibold flex items-center gap-1"
+                  href={activeSlide.primaryCta.href}
+                  className="inline-flex items-center justify-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white text-sm sm:text-base font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-500/30 transition transform hover:-translate-y-0.5"
+                  id={`hero-primary-cta-${activeSlide.id}`}
                 >
-                  Track Sample Ticket →
+                  <activeSlide.primaryCta.icon className="w-4 h-4" />
+                  <span>{activeSlide.primaryCta.label}</span>
                 </Link>
+
+                {activeSlide.secondaryCta.isCall ? (
+                  <a
+                    href={activeSlide.secondaryCta.href}
+                    className="inline-flex items-center justify-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-white text-sm sm:text-base font-bold px-5 py-3.5 rounded-xl border border-slate-700 backdrop-blur-md transition transform hover:-translate-y-0.5"
+                    id={`hero-call-cta-${activeSlide.id}`}
+                  >
+                    <Phone className="w-4 h-4 text-sky-400" />
+                    <span>{activeSlide.secondaryCta.label}</span>
+                  </a>
+                ) : (
+                  <a
+                    href={activeSlide.secondaryCta.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm sm:text-base font-bold px-5 py-3.5 rounded-xl shadow-md transition transform hover:-translate-y-0.5"
+                    id={`hero-whatsapp-cta-${activeSlide.id}`}
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>{activeSlide.secondaryCta.label}</span>
+                  </a>
+                )}
               </div>
-            </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Clean Bottom Navigation Bar & Progress Indicator */}
+      <div className="relative z-20 bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 py-3 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          {/* Controls: Play/Pause & Slide Count */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsPlaying(!isPlaying)}
+              aria-label={isPlaying ? 'Pause auto-play' : 'Resume auto-play'}
+              className="w-8 h-8 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition cursor-pointer"
+              id="hero-slider-play-pause-btn"
+              title={isPlaying ? 'Pause auto-play' : 'Resume auto-play'}
+            >
+              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            </button>
+
+            <span className="text-xs font-mono font-bold text-sky-400 bg-sky-950/80 border border-sky-800/80 px-2.5 py-1 rounded-md">
+              0{currentSlide + 1} / 0{totalSlides}
+            </span>
           </div>
+
+          {/* Minimalist Slide Indicator Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto py-1">
+            {HERO_SLIDES.map((slide, index) => {
+              const isActive = index === currentSlide;
+              return (
+                <button
+                  key={slide.id}
+                  type="button"
+                  onClick={() => goToSlide(index)}
+                  className={`text-left px-3 py-1.5 rounded-xl border text-xs transition-all flex items-center gap-2 cursor-pointer ${
+                    isActive
+                      ? 'bg-sky-600/40 border-sky-400 text-white font-bold shadow-xs'
+                      : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  }`}
+                  id={`hero-slide-tab-${slide.id}`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 flex-shrink-0" />
+                  <span className="whitespace-nowrap truncate max-w-[130px] sm:max-w-[180px]">
+                    {slide.tag}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Dynamic Auto-Play Progress Bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-900 overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-sky-500 to-cyan-400 transition-all duration-75 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
     </section>

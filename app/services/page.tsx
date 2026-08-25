@@ -1,122 +1,200 @@
+'use client';
+
 import React from 'react';
-import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Wrench,
   Wind,
-  Activity,
-  BatteryCharging,
   ShieldCheck,
-  CheckCircle2,
+  Clock,
+  MapPin,
+  Phone,
+  MessageSquare,
   ArrowRight,
-  ShieldAlert,
-  Search
+  Sparkles,
+  CheckCircle2,
+  Package
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import MobileStickyBar from '@/components/layout/MobileStickyBar';
-import { SERVICES } from '@/lib/data/services';
+import { STATIONARY_BRANDS, POC_BRANDS } from '@/lib/data/brands';
+import { COMPANY_CONTACT } from '@/lib/data/branches';
 
-export const metadata: Metadata = {
-  title: 'Medical Oxygen Equipment Services Directory | Oxygen Services',
-  description: 'Specialist service offerings for stationary oxygen machines, oxygen concentrators, and portable oxygen concentrators across Mumbai, Pune, and Lucknow.',
-  keywords: [
-    'oxygen concentrator services',
-    'oxygen machine repair services',
-    'medical oxygen equipment maintenance',
-    'oxygen technician services India'
-  ]
-};
-
-export default function ServicesDirectoryPage() {
+export default function ServicesHubPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7FAFC]">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       <Navbar />
 
-      <main className="flex-grow py-12 lg:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1677FF] text-xs font-bold uppercase tracking-wider mb-2">
-              <Wrench className="w-3.5 h-3.5" />
-              Technical Capabilities
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="bg-[#0A192F] text-white py-14 sm:py-18 border-b border-sky-950">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-400 text-xs font-bold uppercase tracking-wider mb-4 border border-sky-400/30">
+                <Wrench className="w-3.5 h-3.5" />
+                <span>Biomedical Service & Repair Hub</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                Service & Repair of{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">
+                  Oxygen Concentrators
+                </span>
+              </h1>
+              <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed">
+                Specialized biomedical laboratory servicing with 95%+ purity restoration, genuine molecular sieve zeolite repours, compressor rebuilding, and circuit board diagnostics across Mumbai, Pune, and Lucknow.
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F33] tracking-tight">
-              Medical Oxygen Equipment Services
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 mt-2">
-              Explore our core technical services covering diagnostic inspection, molecular sieve repacking, compressor rebuilds, and calibrated purity verification.
+          </div>
+        </section>
+
+        {/* The 2 Dedicated Service Categories */}
+        <section className="py-14 sm:py-18 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
+              Select Your Equipment Category
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+              Choose Your Machine Type for Specialized Repair
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Select between heavy-duty home stationary concentrators and compact travel portable units.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            {SERVICES.map((s) => (
-              <div
-                key={s.id}
-                className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-300 transition flex flex-col justify-between"
-              >
-                <div>
-                  <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-blue-50 text-[#1677FF] border border-blue-200">
-                    Vendor-Independent
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Category 1: Home (Stationary) */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md hover:shadow-xl hover:border-sky-400 transition-all flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Wrench className="w-6 h-6" />
+                  </div>
+                  <span className="bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold px-3 py-1 rounded-full">
+                    {STATIONARY_BRANDS.length} Brands Serviced
                   </span>
-                  <h2 className="text-2xl font-bold text-slate-900 mt-3 mb-2">
-                    {s.title}
-                  </h2>
-                  <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                    {s.description}
-                  </p>
+                </div>
 
-                  <div className="space-y-3 mb-6">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Detailed Technical Scope:
-                    </p>
-                    <ul className="space-y-2">
-                      {s.detailedScope.slice(0, 4).map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-slate-700">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-sky-600 transition">
+                  1. Home (Stationary) Concentrators
+                </h3>
+                <p className="text-xs font-bold uppercase tracking-wider text-sky-600 mt-0.5">
+                  5 LPM & 10 LPM High Flow Units
+                </p>
+
+                <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                  Full sieve canister repours, rotary solenoid valve syncing, compressor piston cup replacement, and 95%+ certified ultrasonic purity calibration for heavy-duty stationary home units.
+                </p>
+
+                {/* Brands Preview */}
+                <div className="mt-5 pt-4 border-t border-slate-100">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Popular Supported Brands:
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 text-xs">
+                    {STATIONARY_BRANDS.slice(0, 9).map((b) => (
+                      <span
+                        key={b.id}
+                        className="bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded-md border border-slate-200"
+                      >
+                        {b.name}
+                      </span>
+                    ))}
+                    <span className="bg-sky-50 text-sky-700 font-bold px-2 py-1 rounded-md">
+                      +{STATIONARY_BRANDS.length - 9} more
+                    </span>
                   </div>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                  <Link
-                    href={`/${s.slug}`}
-                    className="text-xs font-bold text-[#1677FF] hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>Full Service Specs</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+              <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-3">
+                <Link
+                  href="/services/repair/stationary"
+                  className="flex-1 bg-[#0284c7] hover:bg-[#0369a1] text-white py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-center shadow-md transition flex items-center justify-center gap-2 group-hover:gap-3"
+                >
+                  <span>Explore Stationary Brands ({STATIONARY_BRANDS.length})</span>
+                  <ArrowRight className="w-4 h-4 transition-transform" />
+                </Link>
+              </div>
+            </div>
 
-                  <Link
-                    href={`/request-service?equipment=${encodeURIComponent(s.shortTitle)}`}
-                    className="inline-flex items-center gap-1.5 bg-[#0B1F33] hover:bg-[#1677FF] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition"
-                  >
-                    <Wrench className="w-3.5 h-3.5 text-[#19C6D9]" />
-                    <span>Book Service</span>
-                  </Link>
+            {/* Category 2: Portable (POC) */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md hover:shadow-xl hover:border-cyan-400 transition-all flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Wind className="w-6 h-6" />
+                  </div>
+                  <span className="bg-cyan-50 text-cyan-700 border border-cyan-200 text-xs font-bold px-3 py-1 rounded-full">
+                    {POC_BRANDS.length} POC Brands Refilled
+                  </span>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-cyan-600 transition">
+                  2. Portable Oxygen (POC) Column Refill
+                </h3>
+                <p className="text-xs font-bold uppercase tracking-wider text-cyan-600 mt-0.5">
+                  Sieve Bed Cartridges & Battery Units
+                </p>
+
+                <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                  Specialized column (sieve bed) cartridge zeolite refills, Lithium Zeolite repacking, breath-sensitivity trigger calibration, O2 sensor zero resets, and battery circuit maintenance.
+                </p>
+
+                {/* Brands Preview */}
+                <div className="mt-5 pt-4 border-t border-slate-100">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Supported POC Brands:
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 text-xs">
+                    {POC_BRANDS.map((b) => (
+                      <span
+                        key={b.id}
+                        className="bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded-md border border-slate-200"
+                      >
+                        {b.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            ))}
+
+              <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-3">
+                <Link
+                  href="/services/repair/portable"
+                  className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-center shadow-md transition flex items-center justify-center gap-2 group-hover:gap-3"
+                >
+                  <span>Explore POC Column Refill Brands ({POC_BRANDS.length})</span>
+                  <ArrowRight className="w-4 h-4 transition-transform" />
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 text-center space-y-4">
-            <h3 className="text-xl font-bold text-white">
-              Already have an active service request?
-            </h3>
-            <p className="text-xs text-slate-400 max-w-xl mx-auto">
-              You can check live bench test results, view diagnostic notes, approve your estimate, or download your service report.
-            </p>
+          {/* Also Looking for Machine Rentals? Banner */}
+          <div className="mt-12 bg-gradient-to-r from-emerald-900 to-teal-950 text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-1 text-center sm:text-left">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Need a Temporary Standby Unit?
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black">
+                Rental of Oxygen Concentrators (5L, 10L & POC)
+              </h3>
+              <p className="text-xs sm:text-sm text-emerald-100 max-w-xl">
+                Get an immediate hospital-sanitized standby machine while your device is being serviced, or rent from ₹3,500/month.
+              </p>
+            </div>
+
             <Link
-              href="/track-service"
-              className="inline-flex items-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
+              href="/rent"
+              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3.5 rounded-xl font-extrabold text-sm transition shadow-md whitespace-nowrap flex items-center gap-2"
             >
-              <Search className="w-4 h-4" />
-              <span>Track Service Ticket</span>
+              <Package className="w-4 h-4" />
+              <span>Explore Rental Fleet</span>
             </Link>
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />

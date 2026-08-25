@@ -18,9 +18,10 @@ import { SERVICES } from '@/lib/data/services';
 import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 
 export const metadata: Metadata = {
-  title: 'Oxygen Machine Service & Repair | Oxygen Services',
+  title: 'Oxygen Machine Service & Repair | Oxy Breath Services',
   description: 'Specialist oxygen machine repair, electronic board diagnostics, compressor motor servicing, and maintenance across Mumbai, Pune, and Lucknow.',
   keywords: [
+    'Oxy Breath Services',
     'oxygen machine service',
     'oxygen machine repair',
     'oxygen machine maintenance',

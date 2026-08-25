@@ -288,7 +288,7 @@ export const ARTICLES: Article[] = [
     ],
     faq: [
       {
-        question: 'Where is the Oxygen Services Lucknow branch located?',
+        question: 'Where is the Oxy Breath Services Lucknow branch located?',
         answer: 'Our branch is at Tiwari Ganj, Plot No: B-4, opposite Prime Rose Villa, Chinhat, Uttardhauna, Lucknow, Uttar Pradesh 226028.'
       }
     ]

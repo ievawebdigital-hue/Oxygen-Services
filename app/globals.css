@@ -1,31 +1,42 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --color-ocean-50: #f0f9ff;
+  --color-ocean-100: #e0f2fe;
+  --color-ocean-200: #bae6fd;
+  --color-ocean-300: #7dd3fc;
+  --color-ocean-400: #38bdf8;
+  --color-ocean-500: #0ea5e9;
+  --color-ocean-600: #0284c7;
+  --color-ocean-700: #0369a1;
+  --color-ocean-800: #075985;
+  --color-ocean-900: #0c4a6e;
+  --color-ocean-950: #082f49;
+  --color-navy-900: #0f172a;
+  --color-navy-950: #090d16;
 }
 
 :root {
-  --color-primary: #0B1F33;
-  --color-primary-light: #153252;
-  --color-oxygen-blue: #1677FF;
-  --color-oxygen-cyan: #19C6D9;
-  --color-bg-light: #F7FAFC;
-  --color-text-dark: #14212B;
-  --color-text-muted: #4A5568;
-  --color-success: #16A34A;
-  --color-emergency: #DC2626;
-  --color-border: #E2E8F0;
-  --font-family-base: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --color-ocean-primary: #0284c7;
+  --color-ocean-hover: #0369a1;
+  --color-ocean-dark: #0f172a;
+  --color-ocean-light: #f0f9ff;
+  --color-cyan-accent: #06b6d4;
+  --color-bg-page: #f8fafc;
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+  --color-success: #16a34a;
+  --color-border: #e2e8f0;
 }
 
 @layer base {
-  html, body, input, select, textarea, button {
-    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  html {
+    scroll-behavior: smooth;
   }
-
   body {
-    background-color: var(--color-bg-light);
-    color: var(--color-text-dark);
+    background-color: var(--color-bg-page);
+    color: var(--color-text-main);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -37,19 +48,14 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #bae6fd;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
-}
-
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.02); }
+  background: #38bdf8;
 }
 
 @keyframes flow-dash {
@@ -62,3 +68,24 @@
   stroke-dasharray: 8 4;
   animation: flow-dash 1.5s linear infinite;
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+

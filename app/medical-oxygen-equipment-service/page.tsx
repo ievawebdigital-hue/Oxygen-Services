@@ -17,9 +17,10 @@ import { SERVICES } from '@/lib/data/services';
 import { BRANCHES, COMPANY_CONTACT } from '@/lib/data/branches';
 
 export const metadata: Metadata = {
-  title: 'Medical Oxygen Equipment Service & Repair | Oxygen Services',
+  title: 'Medical Oxygen Equipment Service & Repair | Oxy Breath Services',
   description: 'Specialist medical oxygen equipment service, regulator inspection, flowmeter calibration, and auxiliary testing across Mumbai, Pune, and Lucknow.',
   keywords: [
+    'Oxy Breath Services',
     'medical oxygen equipment service',
     'medical oxygen equipment repair',
     'oxygen regulator repair',

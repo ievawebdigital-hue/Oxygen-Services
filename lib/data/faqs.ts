@@ -9,14 +9,14 @@ export const FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     category: 'General',
-    question: 'What types of medical oxygen equipment does Oxygen Services repair?',
-    answer: 'Oxygen Services specializes in technical servicing, diagnostic inspection, repair, and preventive maintenance for stationary oxygen machines (5 LPM and 10 LPM), home oxygen concentrators, portable oxygen concentrators (POC), and compatible oxygen-related medical equipment such as regulators and flowmeters.'
+    question: 'What types of medical oxygen equipment does Oxy Breath Services repair?',
+    answer: 'Oxy Breath Services specializes in technical servicing, diagnostic inspection, repair, and preventive maintenance for stationary oxygen machines (5 LPM and 10 LPM), home oxygen concentrators, portable oxygen concentrators (POC), and compatible oxygen-related medical equipment such as regulators and flowmeters.'
   },
   {
     id: 'faq-2',
     category: 'General',
     question: 'Can you service equipment purchased from other vendors or importers?',
-    answer: 'Yes. Oxygen Services is an independent, specialist technical service provider. We service compatible medical oxygen equipment regardless of the original retailer or vendor where it was acquired, subject to model compatibility and spare parts availability.'
+    answer: 'Yes. Oxy Breath Services is an independent, specialist technical service provider. We service compatible medical oxygen equipment regardless of the original retailer or vendor where it was acquired, subject to model compatibility and spare parts availability.'
   },
   {
     id: 'faq-3',
@@ -40,7 +40,7 @@ export const FAQS: FAQItem[] = [
     id: 'faq-6',
     category: 'Process & Payment',
     question: 'How do I request a service and track my equipment?',
-    answer: 'You can submit a service request directly through our website by specifying your equipment model and problem, or by calling 9820370015. You will immediately receive a unique Service ID (e.g. OS-2026-000123) which you can use to track live diagnosis, view your estimate, approve repairs, and download your service report online.'
+    answer: 'You can submit a service request directly through our website by specifying your equipment model and problem, or by calling 9820370015. You will immediately receive a unique Service ID (e.g. OBS-2026-000123) which you can use to track live diagnosis, view your estimate, approve repairs, and download your service report online.'
   },
   {
     id: 'faq-7',
@@ -64,6 +64,6 @@ export const FAQS: FAQItem[] = [
     id: 'faq-10',
     category: 'General',
     question: 'Do you provide medical advice or treat patients?',
-    answer: 'No. Oxygen Services is strictly a technical equipment service and repair engineering provider. We service, calibrate, and repair oxygen equipment; we do not diagnose or treat medical conditions. Always follow your prescribing physician\'s clinical guidance for flow rate and usage duration.'
+    answer: 'No. Oxy Breath Services is strictly a technical equipment service and repair engineering provider. We service, calibrate, and repair oxygen equipment; we do not diagnose or treat medical conditions. Always follow your prescribing physician\'s clinical guidance for flow rate and usage duration.'
   }
 ];

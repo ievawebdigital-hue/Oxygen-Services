@@ -438,16 +438,8 @@ export default function AdminDashboardPage() {
                               className="bg-[#1677FF] hover:bg-[#0958D9] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Edit className="w-3 h-3" />
-                              <span>Update</span>
+                              <span>View & Update</span>
                             </button>
-
-                            <Link
-                              href={`/track-service?id=${t.serviceId}&phone=${t.mobileNumber}`}
-                              className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition inline-flex items-center gap-1"
-                            >
-                              <Eye className="w-3 h-3" />
-                              <span>Track</span>
-                            </Link>
                           </td>
                         </tr>
                       ))

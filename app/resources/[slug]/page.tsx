@@ -33,7 +33,7 @@ export async function generateMetadata({
   if (!article) return { title: 'Article Not Found' };
 
   return {
-    title: `${article.title} | Oxygen Services Guide`,
+    title: `${article.title} | Oxy Breath Services Guide`,
     description: article.metaDescription,
     keywords: article.keywords
   };
@@ -109,9 +109,9 @@ export default async function ArticleDetailPage({
             <div className="flex items-center justify-between border-y border-slate-100 py-3 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-[#0B1F33] text-[#19C6D9] flex items-center justify-center font-bold text-[10px]">
-                  OS
+                  OBS
                 </div>
-                <span>Technical Advisory Team • Oxygen Services</span>
+                <span>Technical Advisory Team • Oxy Breath Services</span>
               </div>
               <span>Reviewed by Biomedical Engineers</span>
             </div>

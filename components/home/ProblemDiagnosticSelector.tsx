@@ -34,50 +34,50 @@ export default function ProblemDiagnosticSelector() {
   const [selectedProblem, setSelectedProblem] = useState<ProblemItem | null>(null);
 
   return (
-    <section className="py-16 lg:py-24 bg-slate-900 text-white relative overflow-hidden" id="troubleshooting">
+    <section className="py-14 lg:py-20 bg-[#0A192F] text-white relative overflow-hidden" id="troubleshooting">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/30 text-sky-300 text-xs font-bold uppercase tracking-wider mb-2">
             <AlertTriangle className="w-3.5 h-3.5" />
-            Troubleshooting & Fault Identification
+            <span>Common Machine Issues</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Machine Not Working? Don&apos;t Replace It Before Getting It Checked.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+            Machine Alarming or Low Purity? We Can Fix It.
           </h2>
           <p className="text-sm sm:text-base text-slate-300 mt-2">
-            In most cases, low oxygen concentration, continuous alarms, or compressor noises are caused by consumable filters or molecular sieve degradation that can be serviced at a fraction of replacement cost.
+            Don&apos;t spend ₹40,000+ on a new machine. Most problems are resolved with molecular sieve repours or compressor servicing.
           </p>
         </div>
 
-        {/* 8 Problem Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {COMMON_PROBLEMS.map((prob) => {
+        {/* 6 Clean Problem Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {COMMON_PROBLEMS.slice(0, 6).map((prob) => {
             const Icon = ICON_MAP[prob.icon] || AlertTriangle;
             return (
               <div
                 key={prob.id}
                 onClick={() => setSelectedProblem(prob)}
-                className="bg-slate-800/80 hover:bg-slate-800 rounded-2xl p-5 border border-slate-700 hover:border-[#1677FF] transition-all cursor-pointer flex flex-col justify-between group shadow-lg hover:shadow-blue-500/10 transform hover:-translate-y-1"
+                className="bg-slate-900/80 hover:bg-slate-800/90 rounded-2xl p-5 border border-slate-800 hover:border-sky-400 transition-all cursor-pointer flex flex-col justify-between group shadow-lg hover:shadow-sky-500/10 transform hover:-translate-y-1"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-[#19C6D9] group-hover:bg-[#1677FF] group-hover:text-white flex items-center justify-center transition">
+                    <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 group-hover:bg-[#0284c7] group-hover:text-white flex items-center justify-center transition">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-700 text-slate-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-slate-700">
                       {prob.urgency} Urgency
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white mb-2 group-hover:text-[#19C6D9] transition">
+                  <h3 className="text-base font-bold text-white mb-1.5 group-hover:text-sky-300 transition">
                     {prob.title}
                   </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 mb-4">
                     {prob.symptom}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-[#1677FF] group-hover:text-[#19C6D9] transition">
+                <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-semibold text-sky-400 group-hover:text-sky-300 transition">
                   <span>Diagnose Symptom</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -87,21 +87,21 @@ export default function ProblemDiagnosticSelector() {
         </div>
 
         {/* Callout Strip */}
-        <div className="mt-12 bg-gradient-to-r from-blue-900/40 via-slate-800 to-blue-900/40 rounded-2xl p-6 border border-blue-700/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-10 bg-gradient-to-r from-sky-950/60 via-slate-900 to-sky-950/60 rounded-2xl p-5 sm:p-6 border border-sky-800/40 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <p className="text-base font-bold text-white">
-              Experiencing a different error code or unlisted symptom?
+            <p className="text-sm sm:text-base font-bold text-white">
+              Need immediate technical diagnosis for your concentrator?
             </p>
             <p className="text-xs text-slate-400 mt-0.5">
-              Our technicians have specialized diagnostic benches for all major medical oxygen equipment models.
+              Doorstep pickup across Mumbai, Pune, and Lucknow. Same-day rental backups available.
             </p>
           </div>
           <Link
-            href="/request-service"
-            className="inline-flex items-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow whitespace-nowrap transition"
+            href="/request-service?mode=repair"
+            className="inline-flex items-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow whitespace-nowrap transition"
           >
             <Wrench className="w-4 h-4" />
-            <span>Tell Us What&apos;s Wrong</span>
+            <span>Book Repair Service</span>
           </Link>
         </div>
       </div>
@@ -109,24 +109,24 @@ export default function ProblemDiagnosticSelector() {
       {/* Modal Dialog for Problem Diagnosis */}
       {selectedProblem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="bg-slate-900 border border-slate-700 text-white rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
+          <div className="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-xl w-full p-6 sm:p-7 space-y-5 shadow-2xl relative">
             <button
               onClick={() => setSelectedProblem(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800 cursor-pointer"
               aria-label="Close Modal"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#1677FF]/20 text-[#19C6D9] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center border border-sky-400/30">
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#19C6D9]">
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
                   Diagnostic Advisory
                 </span>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-lg sm:text-xl font-extrabold text-white">
                   {selectedProblem.title}
                 </h3>
               </div>
@@ -134,7 +134,7 @@ export default function ProblemDiagnosticSelector() {
 
             <div className="space-y-3 text-xs leading-relaxed text-slate-300">
               <div className="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
-                <p className="font-bold text-white mb-1">Reported Symptom:</p>
+                <p className="font-bold text-white mb-0.5">Reported Symptom:</p>
                 <p className="text-slate-300">{selectedProblem.symptom}</p>
               </div>
 
@@ -143,32 +143,17 @@ export default function ProblemDiagnosticSelector() {
                   Probable Technical Causes:
                 </p>
                 <ul className="space-y-1.5">
-                  {selectedProblem.probableCauses.map((cause, idx) => (
+                  {selectedProblem.probableCauses.slice(0, 3).map((cause, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-slate-300">
-                      <span className="text-[#19C6D9] font-bold">•</span>
+                      <span className="text-sky-400 font-bold">•</span>
                       <span>{cause}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="p-3 bg-amber-950/40 border border-amber-900/60 rounded-xl text-amber-200">
-                <p className="font-bold text-amber-300 mb-1 flex items-center gap-1.5">
-                  <ShieldAlert className="w-4 h-4" />
-                  Immediate Safe Actions at Home:
-                </p>
-                <ul className="space-y-1">
-                  {selectedProblem.immediateSteps.map((step, idx) => (
-                    <li key={idx} className="text-slate-300 flex items-start gap-1.5">
-                      <span>✓</span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-3 bg-blue-950/40 border border-blue-800/40 rounded-xl">
-                <p className="font-bold text-[#19C6D9] mb-0.5">Recommended Professional Solution:</p>
+              <div className="p-3 bg-sky-950/60 border border-sky-800/40 rounded-xl">
+                <p className="font-bold text-sky-300 mb-0.5">Recommended Professional Solution:</p>
                 <p className="text-slate-300">{selectedProblem.recommendedAction}</p>
               </div>
             </div>
@@ -177,16 +162,16 @@ export default function ProblemDiagnosticSelector() {
               <button
                 type="button"
                 onClick={() => setSelectedProblem(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white"
+                className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
               >
                 Close
               </button>
               <Link
-                href={`/request-service?problem=${encodeURIComponent(selectedProblem.title)}`}
-                className="inline-flex items-center gap-2 bg-[#1677FF] hover:bg-[#0958D9] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow transition"
+                href={`/request-service?mode=repair&issue=${encodeURIComponent(selectedProblem.title)}`}
+                className="inline-flex items-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow transition"
               >
                 <Wrench className="w-4 h-4" />
-                <span>Book Service For This Problem</span>
+                <span>Book Service For This Issue</span>
               </Link>
             </div>
           </div>

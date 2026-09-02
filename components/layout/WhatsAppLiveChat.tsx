@@ -144,15 +144,12 @@ export default function WhatsAppLiveChat() {
             >
               <X className="w-3 h-3" />
             </button>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
               <p className="text-xs font-extrabold text-slate-900 flex items-center gap-1">
-                Biomedical Support Online
+                Oxygen Concentrator Support Online
               </p>
             </div>
-            <p className="text-xs text-slate-600 leading-snug">
-              Need urgent help with oxygen purity, error alarms, or service pickup? Chat with our engineers now!
-            </p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -181,7 +178,7 @@ export default function WhatsAppLiveChat() {
                   <div>
                     <div className="flex items-center gap-1.5">
                       <h3 className="font-bold text-sm leading-tight text-white">
-                        Oxygen Support Live
+                        Oxygen Concentrator Support Online
                       </h3>
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
                     </div>

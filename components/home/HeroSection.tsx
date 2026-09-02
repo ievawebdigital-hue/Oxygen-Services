@@ -16,8 +16,8 @@ import { COMPANY_CONTACT } from '@/lib/data/branches';
 
 // Import generated hero slider images
 import heroRepairLab from '@/src/assets/images/hero_repair_lab_1787421415668.jpg';
-import heroRentalFleet from '@/src/assets/images/hero_rental_fleet_1787421429568.jpg';
-import heroDoorstepService from '@/src/assets/images/hero_doorstep_service_1787421458147.jpg';
+import heroRentalFleet from '@/src/assets/images/hero_rental_products_1788318936362.jpg';
+import heroDoorstepService from '@/src/assets/images/indian_doorstep_delivery_1788319284874.jpg';
 
 interface HeroSlide {
   id: number;
@@ -59,8 +59,8 @@ const HERO_SLIDES: HeroSlide[] = [
     image: heroRentalFleet,
     alt: 'Fleet of sanitized 5L, 10L, and portable oxygen concentrators ready for rent',
     primaryCta: {
-      label: 'Book Concentrator Service',
-      href: '/request-service?mode=repair',
+      label: 'Book Rental',
+      href: '/rent',
       icon: Wrench,
     },
     secondaryCta: {

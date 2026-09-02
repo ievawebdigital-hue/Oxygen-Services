@@ -96,6 +96,35 @@ export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai', hideE
       });
 
       setSubmittedTicket(newTicket);
+
+      // Build WhatsApp message with all form fields
+      const waLines = [
+        `*NEW ${enquiryType === 'rent' ? 'EQUIPMENT RENTAL ENQUIRY' : 'SERVICE & REPAIR ENQUIRY'}*`,
+        `*Ticket ID:* #${newTicket.serviceId}`,
+        ``,
+        `*Customer Details:*`,
+        `• *Name:* ${formData.fullName}`,
+        `• *Mobile:* ${formData.mobileNumber}`,
+        formData.whatsappNumber ? `• *WhatsApp:* ${formData.whatsappNumber}` : null,
+        `• *City / Branch:* ${formData.city}`,
+        ``,
+        `*Equipment & Service:*`,
+        `• *Equipment:* ${formData.equipmentType}`,
+        formData.brandModel ? `• *Brand / Model:* ${formData.brandModel}` : null,
+        enquiryType === 'rent' ? `• *Rental Duration:* ${formData.rentalDuration}` : null,
+        `• *Requirement / Problem:* ${formData.problemOrRequirement || 'Standard Request'}`,
+        `• *Fulfillment:* ${formData.fulfillmentType}`,
+        formData.preferredDate ? `• *Preferred Date:* ${formData.preferredDate}` : null,
+        formData.address ? `• *Address:* ${formData.address}` : null,
+        formData.notes ? `• *Additional Notes:* ${formData.notes}` : null
+      ].filter(Boolean).join('\n');
+
+      const waUrl = `https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=${encodeURIComponent(waLines)}`;
+      
+      // Auto open WhatsApp with all form data
+      if (typeof window !== 'undefined') {
+        window.open(waUrl, '_blank');
+      }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to submit enquiry. Please try again or call our direct helpline.');
     } finally {
@@ -293,6 +322,47 @@ export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai', hideE
               </select>
             </div>
           </div>
+
+          {/* Mumbai Service Coverage Areas Banner */}
+          {formData.city === 'Mumbai' && (
+            <div className="bg-sky-50/70 border border-sky-200/80 rounded-2xl p-3.5 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-[#0B1F33] flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-sky-600" />
+                  Mumbai Service Coverage Areas:
+                </span>
+                <span className="text-[10px] text-sky-700 font-semibold">Click to add to address</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { num: '1', name: 'Thane' },
+                  { num: '2', name: 'Mira-Bhayandar' },
+                  { num: '3', name: 'Vasai-Virar' },
+                  { num: '4', name: 'Kalyan - Bhiwandi' }
+                ].map((item) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => {
+                      const current = formData.address;
+                      if (!current.includes(item.name)) {
+                        setFormData({
+                          ...formData,
+                          address: current ? `${current}, ${item.name}` : item.name
+                        });
+                      }
+                    }}
+                    className="flex items-center gap-1.5 bg-white hover:bg-sky-100/60 border border-sky-200 text-[#0B1F33] px-2.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer text-left"
+                  >
+                    <span className="w-4 h-4 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0">
+                      {item.num}
+                    </span>
+                    <span className="truncate">{item.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Row 2: Customer Contact Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -34,7 +34,7 @@ export const BRANCHES: Branch[] = [
     hours: 'Monday – Saturday: 9:00 AM – 8:00 PM | Sunday: Emergency On-Call Support',
     mapEmbedUrl: 'https://maps.google.com/maps?q=OXY+BREATH+SERVICES,+Shop+No+11+Park,+Gokul+village,+Mira+Road+East,+Mira+Bhayandar,+Maharashtra+401107&t=&z=15&ie=UTF8&iwloc=&output=embed',
     directionsUrl: 'https://www.google.com/maps/search/?api=1&query=OXY+BREATH+SERVICES+Shop+No+11+Park+Gokul+village+Mira+Road+East+Mira+Bhayandar+Maharashtra+401107',
-    keyAreas: ['Mira Road', 'Bhayandar', 'Borivali', 'Kandivali', 'Andheri', 'Bandra', 'Thane', 'Navi Mumbai', 'Vasai-Virar'],
+    keyAreas: ['Thane', 'Mira-Bhayandar', 'Vasai-Virar', 'Kalyan - Bhiwandi'],
     description: 'Our central diagnostic lab and primary technical workshop for major compressor overhauls, molecular sieve replacements, and component-level circuit board repairs.',
     servicesAvailable: [
       'Stationary Oxygen Concentrator Service',

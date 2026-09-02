@@ -206,12 +206,12 @@ export const ARTICLES: Article[] = [
     category: 'Local Service',
     readTime: '4 min read',
     publishedDate: '2026-08-01',
-    summary: 'Comprehensive oxygen equipment repair, calibration, and technician support across Mumbai, Mira Road, Thane, and Navi Mumbai.',
-    metaDescription: 'Looking for oxygen concentrator repair in Mumbai? Oxygen Services provides specialist diagnosis, sieve repacking, and maintenance from Mira Road Head Office.',
-    keywords: ['oxygen concentrator repair Mumbai', 'oxygen machine service Mumbai', 'oxygen equipment technician Mumbai', 'Mira Road oxygen repair'],
+    summary: 'Comprehensive oxygen equipment repair, calibration, and technician support across Mumbai (Thane, Mira-Bhayandar, Vasai-Virar, and Kalyan - Bhiwandi).',
+    metaDescription: 'Looking for oxygen concentrator repair in Mumbai? Oxygen Services provides specialist diagnosis, sieve repacking, and maintenance covering Thane, Mira-Bhayandar, Vasai-Virar, and Kalyan - Bhiwandi.',
+    keywords: ['oxygen concentrator repair Mumbai', 'oxygen machine service Mumbai', 'Thane oxygen concentrator repair', 'Mira Bhayandar oxygen service', 'Vasai Virar oxygen machine repair', 'Kalyan Bhiwandi oxygen concentrator'],
     keyTakeaways: [
-      'Head office diagnostic center located in Mira Road East.',
-      'Full coverage across Mumbai Western, Central, Harbor lines, and Thane.',
+      'Head office diagnostic center located in Mira Road East (Mira-Bhayandar).',
+      'Dedicated service coverage across Thane, Mira-Bhayandar, Vasai-Virar, and Kalyan - Bhiwandi.',
       'Equipped with digital ultrasonic analyzers and compressor test benches.'
     ],
     content: [
@@ -220,8 +220,8 @@ export const ARTICLES: Article[] = [
         text: 'Located at Shop No. 11 Park, Gokul Village, Mira Road East, our Mumbai Head Office functions as the primary diagnostic workshop for high-precision repairs. We handle stationary 5L/10L concentrators and portable units with advanced test benches.'
       },
       {
-        heading: 'Areas Covered Across Mumbai Metropolitan Region',
-        text: 'We serve clients across Mira-Bhayandar, Borivali, Kandivali, Malad, Goregaon, Andheri, Bandra, Dadar, Thane, Navi Mumbai, and Vasai-Virar with prompt branch drop-off and pickup coordination.'
+        heading: 'Areas Covered Across Mumbai',
+        text: 'In Mumbai, we provide comprehensive doorstep pickup, on-site diagnostics, and rental deliveries across 4 major regions: 1) Thane, 2) Mira-Bhayandar, 3) Vasai-Virar, and 4) Kalyan - Bhiwandi.'
       }
     ],
     faq: [

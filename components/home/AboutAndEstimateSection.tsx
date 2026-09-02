@@ -11,7 +11,8 @@ import {
   Phone,
   Clock,
   Wrench,
-  AlertCircle
+  AlertCircle,
+  MessageSquare
 } from 'lucide-react';
 import { COMPANY_CONTACT } from '@/lib/data/branches';
 
@@ -38,6 +39,13 @@ export default function AboutAndEstimateSection() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [submittedData, setSubmittedData] = useState<{
+    name: string;
+    phone: string;
+    email: string;
+    message: string;
+  } | null>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.phone.trim()) {
@@ -47,10 +55,33 @@ export default function AboutAndEstimateSection() {
     }
 
     setStatus('submitting');
+    
+    const dataToSend = { ...formData };
+    setSubmittedData(dataToSend);
+
+    // Build WhatsApp formatted message with all form fields
+    const waLines = [
+      `*FREE ESTIMATE & QUOTE REQUEST - OXY BREATH SERVICES*`,
+      ``,
+      `*Customer Details:*`,
+      `• *Name:* ${dataToSend.name}`,
+      `• *Phone / Mobile:* ${dataToSend.phone}`,
+      dataToSend.email ? `• *City / Email:* ${dataToSend.email}` : null,
+      ``,
+      `*Equipment Requirement & Message:*`,
+      dataToSend.message ? `${dataToSend.message}` : `Inspection & Repair Price Estimate Request`
+    ].filter(Boolean).join('\n');
+
+    const waUrl = `https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=${encodeURIComponent(waLines)}`;
+
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank');
+    }
+
     setTimeout(() => {
       setStatus('success');
       setFormData({ name: '', phone: '', email: '', message: '' });
-    }, 800);
+    }, 400);
   };
 
   return (
@@ -117,21 +148,56 @@ export default function AboutAndEstimateSection() {
               </div>
 
               {status === 'success' ? (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center animate-in fade-in duration-200">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
+                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center animate-in fade-in duration-200 space-y-4">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold text-emerald-900">Estimate Request Received!</h4>
-                  <p className="text-xs text-emerald-700 mt-1 leading-relaxed">
-                    Our biomedical engineer will review your request and call you back within 15–30 minutes with transparent pricing.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setStatus('idle')}
-                    className="mt-4 text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-4 py-2 rounded-xl transition cursor-pointer"
-                  >
-                    Submit another request
-                  </button>
+                  <div>
+                    <h4 className="text-base font-bold text-emerald-900">Estimate Request Received!</h4>
+                    <p className="text-xs text-emerald-700 mt-1 leading-relaxed">
+                      Your estimate details have been compiled and sent to our biomedical engineering desk. A technician will contact you shortly.
+                    </p>
+                  </div>
+
+                  {submittedData && (
+                    <div className="bg-white/80 rounded-xl p-3 border border-emerald-200 text-left text-xs space-y-1">
+                      <p><strong className="text-slate-700">Name:</strong> {submittedData.name}</p>
+                      <p><strong className="text-slate-700">Phone:</strong> {submittedData.phone}</p>
+                      {submittedData.email && <p><strong className="text-slate-700">City / Email:</strong> {submittedData.email}</p>}
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-1">
+                    <a
+                      href={`https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=${encodeURIComponent(
+                        [
+                          `*FREE ESTIMATE & QUOTE REQUEST - OXY BREATH SERVICES*`,
+                          ``,
+                          `*Customer Details:*`,
+                          `• *Name:* ${submittedData?.name || ''}`,
+                          `• *Phone / Mobile:* ${submittedData?.phone || ''}`,
+                          submittedData?.email ? `• *City / Email:* ${submittedData.email}` : null,
+                          ``,
+                          `*Equipment Requirement & Message:*`,
+                          submittedData?.message ? `${submittedData.message}` : `Inspection & Repair Price Estimate Request`
+                        ].filter(Boolean).join('\n')
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md transition"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Chat on WhatsApp</span>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() => setStatus('idle')}
+                      className="w-full sm:w-auto text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-4 py-2.5 rounded-xl transition cursor-pointer"
+                    >
+                      Submit Another
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">

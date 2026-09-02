@@ -51,7 +51,7 @@ export default function StationaryRepairPage() {
                   className="bg-[#0284c7] hover:bg-[#0369a1] text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-sky-500/25 transition inline-flex items-center gap-2"
                 >
                   <Wrench className="w-4 h-4" />
-                  <span>Book Doorstep Repair Pickup</span>
+                  <span>Book Repair</span>
                 </Link>
                 <a
                   href={`tel:+91${COMPANY_CONTACT.primaryPhone}`}

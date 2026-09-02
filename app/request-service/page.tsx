@@ -172,6 +172,39 @@ function ServiceRequestForm() {
       });
 
       setCreatedTicket(ticket);
+
+      // Build formatted WhatsApp message with all form fields
+      const waLines = [
+        `*NEW ${bookingMode === 'rent' ? 'EQUIPMENT RENTAL RESERVATION' : 'DOORSTEP SERVICE & REPAIR BOOKING'}*`,
+        `*Ticket ID:* #${ticket.serviceId}`,
+        ``,
+        `*Customer Details:*`,
+        `• *Name:* ${formData.customerName}`,
+        `• *Mobile:* ${formData.mobileNumber}`,
+        formData.whatsappNumber ? `• *WhatsApp:* ${formData.whatsappNumber}` : null,
+        formData.email ? `• *Email:* ${formData.email}` : null,
+        `• *City / Branch Hub:* ${formData.city}`,
+        ``,
+        `*Equipment & Service Details:*`,
+        `• *Equipment Category:* ${formData.equipmentType}`,
+        formData.brand ? `• *Brand:* ${formData.brand}` : null,
+        formData.modelNumber ? `• *Model / Unit:* ${formData.modelNumber}` : null,
+        bookingMode === 'rent' ? `• *Rental Machine:* ${formData.rentalEquipment}` : null,
+        bookingMode === 'rent' ? `• *Rental Duration:* ${formData.rentalDuration}` : null,
+        `• *Problem / Requirements:* ${summaryText}`,
+        `• *Service Option:* ${bookingMode === 'rent' ? 'Sanitized Rental Fleet Dispatch' : formData.serviceType}`,
+        `• *Fulfillment Mode:* ${formData.fulfillmentType}`,
+        formData.preferredDate ? `• *Preferred Date:* ${formData.preferredDate}` : null,
+        formData.address ? `• *Address / Landmark:* ${formData.address}` : null,
+        formData.additionalMessage ? `• *Special Instructions:* ${formData.additionalMessage}` : null
+      ].filter(Boolean).join('\n');
+
+      const waUrl = `https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=${encodeURIComponent(waLines)}`;
+
+      // Auto open WhatsApp with all form data
+      if (typeof window !== 'undefined') {
+        window.open(waUrl, '_blank');
+      }
     } catch (err) {
       setErrorMsg('Failed to register request. Please call 9820370015 directly.');
     } finally {
@@ -301,13 +334,35 @@ function ServiceRequestForm() {
                 </Link>
 
                 <a
-                  href={`https://wa.me/919820370015?text=Hello%20Oxy%20Breath%20Services%2C%20I%20have%20submitted%20ticket%20${createdTicket.serviceId}%20for%20${encodeURIComponent(createdTicket.customerName)}%20in%20${createdTicket.city}.`}
+                  href={`https://wa.me/91${COMPANY_CONTACT.whatsapp}?text=${encodeURIComponent(
+                    [
+                      `*NEW ${bookingMode === 'rent' ? 'EQUIPMENT RENTAL RESERVATION' : 'DOORSTEP SERVICE & REPAIR BOOKING'}*`,
+                      `*Ticket ID:* #${createdTicket.serviceId}`,
+                      ``,
+                      `*Customer Details:*`,
+                      `• *Name:* ${createdTicket.customerName}`,
+                      `• *Mobile:* ${createdTicket.mobileNumber}`,
+                      createdTicket.whatsappNumber ? `• *WhatsApp:* ${createdTicket.whatsappNumber}` : null,
+                      createdTicket.email ? `• *Email:* ${createdTicket.email}` : null,
+                      `• *City / Branch Hub:* ${createdTicket.city}`,
+                      ``,
+                      `*Equipment & Service Details:*`,
+                      `• *Equipment Category:* ${createdTicket.equipmentType}`,
+                      createdTicket.brand ? `• *Brand:* ${createdTicket.brand}` : null,
+                      createdTicket.modelNumber ? `• *Model / Unit:* ${createdTicket.modelNumber}` : null,
+                      `• *Problem / Requirements:* ${createdTicket.problemSummary}`,
+                      `• *Fulfillment Mode:* ${createdTicket.fulfillmentType}`,
+                      createdTicket.preferredDate ? `• *Preferred Date:* ${createdTicket.preferredDate}` : null,
+                      createdTicket.address ? `• *Address:* ${createdTicket.address}` : null,
+                      createdTicket.additionalMessage ? `• *Special Instructions:* ${createdTicket.additionalMessage}` : null
+                    ].filter(Boolean).join('\n')
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-xs shadow transition"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  <span>Confirm on WhatsApp</span>
+                  <span>Chat / Confirm on WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -484,13 +539,57 @@ function ServiceRequestForm() {
                   ))}
                 </div>
 
+                {formData.city === 'Mumbai' && (
+                  <div className="bg-sky-50/80 border border-sky-200 rounded-2xl p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-extrabold text-[#0B1F33] flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-sky-600" />
+                        Mumbai Service Coverage Areas:
+                      </span>
+                      <span className="text-[10px] text-sky-700 font-semibold">Tap to add</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                      {[
+                        { num: '1', name: 'Thane' },
+                        { num: '2', name: 'Mira-Bhayandar' },
+                        { num: '3', name: 'Vasai-Virar' },
+                        { num: '4', name: 'Kalyan - Bhiwandi' }
+                      ].map((item) => (
+                        <button
+                          key={item.name}
+                          type="button"
+                          onClick={() => {
+                            const current = formData.address;
+                            if (!current.includes(item.name)) {
+                              setFormData({
+                                ...formData,
+                                address: current ? `${current}, ${item.name}` : item.name
+                              });
+                            }
+                          }}
+                          className="flex items-center gap-1.5 bg-white hover:bg-sky-100 border border-sky-200 text-[#0B1F33] px-2 py-1.5 rounded-xl text-[11px] font-bold transition shadow-2xs cursor-pointer text-left"
+                        >
+                          <span className="w-3.5 h-3.5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[9px] font-extrabold flex-shrink-0">
+                            {item.num}
+                          </span>
+                          <span className="truncate">{item.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Doorstep Delivery / Pickup Address:
                   </label>
                   <input
                     type="text"
-                    placeholder="Building name, Flat no, Landmark / Area..."
+                    placeholder={
+                      formData.city === 'Mumbai'
+                        ? 'Building name, Flat no, in Thane / Mira-Bhayandar / Vasai-Virar / Kalyan - Bhiwandi...'
+                        : 'Building name, Flat no, Landmark / Area...'
+                    }
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none"

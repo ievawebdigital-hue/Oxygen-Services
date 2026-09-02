@@ -5,15 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   Wrench,
-  Package,
   Phone,
   MessageSquare,
   ChevronLeft,
   ChevronRight,
-  Pause,
-  Play,
   ArrowRight,
-  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { COMPANY_CONTACT } from '@/lib/data/branches';
@@ -21,7 +17,6 @@ import { COMPANY_CONTACT } from '@/lib/data/branches';
 // Import generated hero slider images
 import heroRepairLab from '@/src/assets/images/hero_repair_lab_1787421415668.jpg';
 import heroRentalFleet from '@/src/assets/images/hero_rental_fleet_1787421429568.jpg';
-import heroPurityTest from '@/src/assets/images/hero_purity_test_1787421441811.jpg';
 import heroDoorstepService from '@/src/assets/images/hero_doorstep_service_1787421458147.jpg';
 
 interface HeroSlide {
@@ -29,10 +24,9 @@ interface HeroSlide {
   tag: string;
   headline: string;
   highlightedText: string;
-  subhead: string;
+  subhead?: string;
   image: any;
   alt: string;
-  highlights: string[];
   primaryCta: { label: string; href: string; icon: any };
   secondaryCta: { label: string; href: string; icon: any; isCall?: boolean; isWhatsApp?: boolean };
 }
@@ -42,11 +36,9 @@ const HERO_SLIDES: HeroSlide[] = [
     id: 1,
     tag: 'Biomedical Repair Laboratory',
     headline: 'Oxygen Concentrator Repair & ',
-    highlightedText: 'Sieve Bed Repours',
-    subhead: 'Specialist molecular sieve zeolite repours, compressor rebuilding, and circuit board servicing. Restoring 95%+ medical oxygen purity for Philips, DeVilbiss, Inogen, and Yuwell.',
+    highlightedText: 'Services',
     image: heroRepairLab,
     alt: 'Biomedical laboratory technician repairing medical oxygen concentrator',
-    highlights: ['95%±3% Purity Calibration', 'Genuine Zeolite Repours', '24-48 Hr Turnaround'],
     primaryCta: {
       label: 'Book Repair Service',
       href: '/request-service?mode=repair',
@@ -61,13 +53,11 @@ const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: 2,
-    tag: 'Sanitized Rental Fleet',
-    headline: 'Rent 5L, 10L & Portable POC ',
-    highlightedText: 'From ₹3,500/Month',
-    subhead: 'Pristine, 100% sanitized medical oxygen concentrators delivered same-day to your residence in Mumbai, Pune, and Lucknow with complete sterile accessories.',
+    tag: 'Rentals',
+    headline: 'Rent 5 liters , 10 liters & portable oxygen concentrators | ',
+    highlightedText: '3000 Per month',
     image: heroRentalFleet,
     alt: 'Fleet of sanitized 5L, 10L, and portable oxygen concentrators ready for rent',
-    highlights: ['5L & 10L High Flow Units', 'Portable Battery POCs', 'Free Cannula & Bottle'],
     primaryCta: {
       label: 'Book Concentrator Service',
       href: '/request-service?mode=repair',
@@ -82,34 +72,11 @@ const HERO_SLIDES: HeroSlide[] = [
   },
   {
     id: 3,
-    tag: 'Clinical Quality Assurance',
-    headline: 'Guaranteed 95%±3% Purity With ',
-    highlightedText: 'Ultrasonic Calibration',
-    subhead: 'Every repaired machine undergoes continuous 2-hour burn-in testing and digital acoustic analyzer verification with a signed QC test report.',
-    image: heroPurityTest,
-    alt: 'Biomedical ultrasonic oxygen analyzer displaying verified purity level',
-    highlights: ['Digital Acoustic Testing', 'Signed QC Purity Certificate', 'Immediate Swap Warranty'],
-    primaryCta: {
-      label: 'About Our Quality Protocols',
-      href: '/about',
-      icon: CheckCircle2,
-    },
-    secondaryCta: {
-      label: 'Chat on WhatsApp',
-      href: COMPANY_CONTACT.whatsappUrl,
-      icon: MessageSquare,
-      isWhatsApp: true,
-    },
-  },
-  {
-    id: 4,
     tag: 'Mumbai • Pune • Lucknow Hubs',
     headline: 'Fast Doorstep Pickup & Delivery ',
     highlightedText: 'Across 3 Major Regions',
-    subhead: 'Our dedicated biomedical field engineers provide rapid doorstep machine pickup, hospital room delivery, and on-site demonstrations in Mumbai MMR, Pune PCMC, and Lucknow.',
     image: heroDoorstepService,
     alt: 'Biomedical service delivery engineer delivering oxygen concentrator',
-    highlights: ['Mumbai Hub (Mira Road)', 'Pune Hub (Mangalwar Peth)', 'Lucknow Hub (Chinhat)'],
     primaryCta: {
       label: 'View Workshop Hubs',
       href: '/contact',
@@ -128,9 +95,7 @@ const AUTO_PLAY_INTERVAL = 5500; // 5.5 seconds per slide
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const totalSlides = HERO_SLIDES.length;
 
@@ -142,36 +107,20 @@ export default function HeroSection() {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   }, [totalSlides]);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
-  // Auto-play timer logic with smooth progress bar
+  // Auto-play timer logic
   useEffect(() => {
-    if (!isPlaying || isHovered) {
+    if (isHovered) {
       return;
     }
 
-    const stepMs = 50;
-    const totalSteps = AUTO_PLAY_INTERVAL / stepMs;
-    let currentStep = 0;
-
     const interval = setInterval(() => {
-      currentStep += 1;
-      const pct = Math.min(100, (currentStep / totalSteps) * 100);
-      setProgress(pct);
-
-      if (currentStep >= totalSteps) {
-        currentStep = 0;
-        setProgress(0);
-        setCurrentSlide((prev) => (prev + 1) % totalSlides);
-      }
-    }, stepMs);
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, AUTO_PLAY_INTERVAL);
 
     return () => {
       clearInterval(interval);
     };
-  }, [isPlaying, isHovered, totalSlides, currentSlide]);
+  }, [isHovered, totalSlides]);
 
   const activeSlide = HERO_SLIDES[currentSlide];
 
@@ -258,24 +207,13 @@ export default function HeroSection() {
               </h1>
 
               {/* Subheading */}
-              <p className="text-sm sm:text-base lg:text-lg text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow">
-                {activeSlide.subhead}
-              </p>
+              {activeSlide.subhead && (
+                <p className="text-sm sm:text-base lg:text-lg text-slate-200 leading-relaxed font-normal drop-shadow">
+                  {activeSlide.subhead}
+                </p>
+              )}
 
-              {/* Clean 3-Key Highlights Checklist */}
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 pt-1 text-xs sm:text-sm font-semibold text-slate-100">
-                {activeSlide.highlights.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="inline-flex items-center gap-1.5 bg-slate-900/70 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Clean Call to Action Buttons */}
+              {/* Call to Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 pt-3">
                 <Link
                   href={activeSlide.primaryCta.href}
@@ -310,62 +248,6 @@ export default function HeroSection() {
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Clean Bottom Navigation Bar & Progress Indicator */}
-      <div className="relative z-20 bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 py-3 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          {/* Controls: Play/Pause & Slide Count */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsPlaying(!isPlaying)}
-              aria-label={isPlaying ? 'Pause auto-play' : 'Resume auto-play'}
-              className="w-8 h-8 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition cursor-pointer"
-              id="hero-slider-play-pause-btn"
-              title={isPlaying ? 'Pause auto-play' : 'Resume auto-play'}
-            >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            </button>
-
-            <span className="text-xs font-mono font-bold text-sky-400 bg-sky-950/80 border border-sky-800/80 px-2.5 py-1 rounded-md">
-              0{currentSlide + 1} / 0{totalSlides}
-            </span>
-          </div>
-
-          {/* Minimalist Slide Indicator Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto py-1">
-            {HERO_SLIDES.map((slide, index) => {
-              const isActive = index === currentSlide;
-              return (
-                <button
-                  key={slide.id}
-                  type="button"
-                  onClick={() => goToSlide(index)}
-                  className={`text-left px-3 py-1.5 rounded-xl border text-xs transition-all flex items-center gap-2 cursor-pointer ${
-                    isActive
-                      ? 'bg-sky-600/40 border-sky-400 text-white font-bold shadow-xs'
-                      : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
-                  }`}
-                  id={`hero-slide-tab-${slide.id}`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 flex-shrink-0" />
-                  <span className="whitespace-nowrap truncate max-w-[130px] sm:max-w-[180px]">
-                    {slide.tag}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Dynamic Auto-Play Progress Bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-900 overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-sky-500 to-cyan-400 transition-all duration-75 ease-linear"
-            style={{ width: `${progress}%` }}
-          />
         </div>
       </div>
     </section>

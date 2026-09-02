@@ -44,32 +44,6 @@ export default function Navbar() {
           <div className="w-full overflow-hidden relative">
             <div className="animate-marquee whitespace-nowrap text-xs font-medium text-slate-300 flex items-center gap-8 py-0.5 select-none">
               {/* Items Set 1 */}
-              <span className="inline-flex items-center gap-2 text-sky-200">
-                <span className="text-amber-400 font-bold">⚡ Same-Day Doorstep Pickup</span>
-                <span className="text-slate-400">•</span>
-                <span>Mumbai (Mira Rd) • Pune (Mangalwar Peth) • Lucknow (Chinhat)</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <span>🔬 Guaranteed 93%–96% O2 Purity Restoration with Ultrasonic QC Report</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-sky-300">
-                <span>💎 100% Genuine Molecular Sieve Zeolite Repouring (Lithium-X & Sodium-X)</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-amber-300 font-semibold">
-                <span>🛡️ 90-Day Full Service & Zeolite Warranty</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
               <span className="inline-flex items-center gap-1.5 text-slate-200">
                 <span>🏥 Multi-Brand Repairs: Philips, Nidek, Yuwell, Inogen, Evox, Oxymed, BMC, BPL & 20+ Brands</span>
               </span>
@@ -78,37 +52,19 @@ export default function Navbar() {
 
               <span className="inline-flex items-center gap-1.5 text-rose-300 font-bold">
                 <span>🚨 Emergency Helpline: +91 9820370015 / 9819459421</span>
+              </span>
+
+              <span className="text-slate-600">✦</span>
+
+              <span className="inline-flex items-center gap-2 text-sky-200">
+                <span className="text-amber-400 font-bold">⚡ Same-Day Doorstep Pickup</span>
+                <span className="text-slate-400">•</span>
+                <span>Mumbai (Mira Rd) • Pune (Mangalwar Peth) • Lucknow (Chinhat)</span>
               </span>
 
               <span className="text-slate-600">✦</span>
 
               {/* Items Set 2 (Duplicate for continuous loop) */}
-              <span className="inline-flex items-center gap-2 text-sky-200">
-                <span className="text-amber-400 font-bold">⚡ Same-Day Doorstep Pickup</span>
-                <span className="text-slate-400">•</span>
-                <span>Mumbai (Mira Rd) • Pune (Mangalwar Peth) • Lucknow (Chinhat)</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <span>🔬 Guaranteed 93%–96% O2 Purity Restoration with Ultrasonic QC Report</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-sky-300">
-                <span>💎 100% Genuine Molecular Sieve Zeolite Repouring (Lithium-X & Sodium-X)</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
-              <span className="inline-flex items-center gap-1.5 text-amber-300 font-semibold">
-                <span>🛡️ 90-Day Full Service & Zeolite Warranty</span>
-              </span>
-
-              <span className="text-slate-600">✦</span>
-
               <span className="inline-flex items-center gap-1.5 text-slate-200">
                 <span>🏥 Multi-Brand Repairs: Philips, Nidek, Yuwell, Inogen, Evox, Oxymed, BMC, BPL & 20+ Brands</span>
               </span>
@@ -117,6 +73,14 @@ export default function Navbar() {
 
               <span className="inline-flex items-center gap-1.5 text-rose-300 font-bold">
                 <span>🚨 Emergency Helpline: +91 9820370015 / 9819459421</span>
+              </span>
+
+              <span className="text-slate-600">✦</span>
+
+              <span className="inline-flex items-center gap-2 text-sky-200">
+                <span className="text-amber-400 font-bold">⚡ Same-Day Doorstep Pickup</span>
+                <span className="text-slate-400">•</span>
+                <span>Mumbai (Mira Rd) • Pune (Mangalwar Peth) • Lucknow (Chinhat)</span>
               </span>
 
               <span className="text-slate-600">✦</span>
@@ -181,94 +145,63 @@ export default function Navbar() {
                   <div className="px-2 space-y-2">
                     {/* OPTION 1: Service and Repair of Oxygen Concentrator */}
                     <div className="p-2.5 rounded-2xl bg-sky-50/50 border border-sky-100 space-y-1.5">
-                      <div className="flex items-center gap-2 px-2 py-1 text-xs font-black text-sky-950 uppercase tracking-wider">
-                        <Wrench className="w-4 h-4 text-sky-600" />
+                      <div className="px-2 py-1 text-xs font-black text-sky-950 uppercase tracking-wider">
                         <span>1. Service & Repair of Oxygen Concentrator</span>
                       </div>
 
-                      {/* Sub-item 1.1: Home (Stationary) */}
+                      {/* Sub-item 1.1: Oxygen concentrator */}
                       <Link
                         href="/services/repair/stationary"
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white bg-white/70 border border-slate-200/70 hover:border-sky-300 hover:shadow-sm transition group"
+                        className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white bg-white/70 border border-slate-200/70 hover:border-sky-300 hover:shadow-sm transition group"
                         onClick={() => {
                           setServicesDropdownOpen(false);
                           setRepairSubmenuOpen(false);
                         }}
                         id="nav-sub-stationary"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center flex-shrink-0 group-hover:bg-sky-600 group-hover:text-white transition mt-0.5">
-                          <Home className="w-4 h-4" />
-                        </div>
-                        <div className="flex-grow">
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-extrabold text-slate-900 group-hover:text-sky-700">
-                              Home (Stationary)
-                            </p>
-                            <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">
-                              18 Brands
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
-                            Philips, Nidek, Yuwell, BPL, Oxymed, Evox & 13 more
-                          </p>
-                        </div>
+                        <p className="text-xs font-extrabold text-slate-900 group-hover:text-sky-700">
+                          Oxygen concentrator
+                        </p>
+                        <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">
+                          18 Brands
+                        </span>
                       </Link>
 
                       {/* Sub-item 1.2: Portable Oxygen (POC) */}
                       <Link
                         href="/services/repair/portable"
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white bg-white/70 border border-slate-200/70 hover:border-cyan-300 hover:shadow-sm transition group"
+                        className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white bg-white/70 border border-slate-200/70 hover:border-cyan-300 hover:shadow-sm transition group"
                         onClick={() => {
                           setServicesDropdownOpen(false);
                           setRepairSubmenuOpen(false);
                         }}
                         id="nav-sub-poc"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-600 group-hover:text-white transition mt-0.5">
-                          <Wind className="w-4 h-4" />
-                        </div>
-                        <div className="flex-grow">
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-extrabold text-slate-900 group-hover:text-cyan-700">
-                              Portable Oxygen (POC)
-                            </p>
-                            <span className="text-[10px] bg-cyan-100 text-cyan-800 font-bold px-1.5 py-0.5 rounded">
-                              8 POC Brands
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
-                            Column sieve refill for Inogen, SimplyGo, Oxymed, AirSep
-                          </p>
-                        </div>
+                        <p className="text-xs font-extrabold text-slate-900 group-hover:text-cyan-700">
+                          Portable Oxygen (POC)
+                        </p>
+                        <span className="text-[10px] bg-cyan-100 text-cyan-800 font-bold px-1.5 py-0.5 rounded">
+                          8 POC Brands
+                        </span>
                       </Link>
                     </div>
 
                     {/* OPTION 2: Rental of Oxygen Concentrator */}
                     <Link
                       href="/rent"
-                      className="flex items-start gap-3 p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:bg-emerald-50 hover:border-emerald-300 transition group"
+                      className="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:bg-emerald-50 hover:border-emerald-300 transition group"
                       onClick={() => {
                         setServicesDropdownOpen(false);
                         setRepairSubmenuOpen(false);
                       }}
                       id="nav-sub-rentals"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition">
-                        <Package className="w-4 h-4" />
-                      </div>
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between">
-                          <p className="text-xs font-black text-slate-900 group-hover:text-emerald-700 uppercase tracking-wide">
-                            2. Rental of Oxygen Concentrator
-                          </p>
-                          <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
-                            5L • 10L • POC
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-600 mt-0.5">
-                          Hospital-sanitized rental fleet from ₹3,500/mo with free sterile accessories & same-day delivery
-                        </p>
-                      </div>
+                      <p className="text-xs font-black text-slate-900 group-hover:text-emerald-700 uppercase tracking-wide">
+                        2. Rental of Oxygen Concentrator
+                      </p>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
+                        5L • 10L • POC
+                      </span>
                     </Link>
                   </div>
                 </div>
@@ -367,8 +300,7 @@ export default function Navbar() {
 
             {/* Option 1: Service and Repair of Oxygen Concentrator */}
             <div className="space-y-1.5 bg-white p-2.5 rounded-xl border border-slate-200">
-              <div className="flex items-center gap-1.5 text-xs font-black text-sky-950 uppercase tracking-wider px-1">
-                <Wrench className="w-3.5 h-3.5 text-sky-600" />
+              <div className="text-xs font-black text-sky-950 uppercase tracking-wider px-1">
                 <span>1. Service & Repair</span>
               </div>
 
@@ -378,10 +310,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-bold text-slate-800 bg-sky-50/50 hover:bg-sky-50 border border-sky-100"
                 >
-                  <span className="flex items-center gap-2">
-                    <Home className="w-3.5 h-3.5 text-sky-600" />
-                    <span>Home (Stationary)</span>
-                  </span>
+                  <span>Oxygen concentrator</span>
                   <span className="text-[10px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-bold">
                     18 Brands
                   </span>
@@ -392,10 +321,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-bold text-slate-800 bg-cyan-50/50 hover:bg-cyan-50 border border-cyan-100"
                 >
-                  <span className="flex items-center gap-2">
-                    <Wind className="w-3.5 h-3.5 text-cyan-600" />
-                    <span>Portable Oxygen (POC)</span>
-                  </span>
+                  <span>Portable Oxygen (POC)</span>
                   <span className="text-[10px] bg-cyan-100 text-cyan-800 px-1.5 py-0.5 rounded font-bold">
                     8 POC Brands
                   </span>
@@ -409,10 +335,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-between p-2.5 rounded-xl text-xs font-black text-emerald-950 bg-emerald-50/70 border border-emerald-200 hover:bg-emerald-100"
             >
-              <span className="flex items-center gap-2">
-                <Package className="w-4 h-4 text-emerald-600" />
-                <span>2. Rental of Oxygen Concentrator</span>
-              </span>
+              <span>2. Rental of Oxygen Concentrator</span>
               <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">
                 5L • 10L • POC
               </span>

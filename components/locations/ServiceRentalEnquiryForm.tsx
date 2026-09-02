@@ -21,9 +21,10 @@ import { COMPANY_CONTACT } from '@/lib/data/branches';
 
 interface Props {
   defaultCity?: 'Mumbai' | 'Pune' | 'Lucknow';
+  hideExtraDetails?: boolean;
 }
 
-export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai' }: Props) {
+export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai', hideExtraDetails = false }: Props) {
   const [enquiryType, setEnquiryType] = useState<'repair' | 'rent'>('repair');
 
   // Form states
@@ -193,56 +194,58 @@ export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai' }: Pro
         <button
           type="button"
           onClick={() => setEnquiryType('repair')}
-          className={`py-4 px-6 font-extrabold text-sm sm:text-base flex items-center justify-center gap-2.5 transition border-b-2 ${
+          className={`py-3.5 px-3 sm:py-4 sm:px-6 font-extrabold text-xs sm:text-base flex items-center justify-center gap-1.5 sm:gap-2.5 transition border-b-2 text-center leading-tight ${
             enquiryType === 'repair'
               ? 'border-sky-600 bg-white text-sky-700 shadow-xs'
               : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
           id="enquiry-tab-repair"
         >
-          <Wrench className={`w-5 h-5 ${enquiryType === 'repair' ? 'text-sky-600' : 'text-slate-400'}`} />
+          <Wrench className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${enquiryType === 'repair' ? 'text-sky-600' : 'text-slate-400'}`} />
           <span>Oxygen Concentrator Service & Repair</span>
         </button>
 
         <button
           type="button"
           onClick={() => setEnquiryType('rent')}
-          className={`py-4 px-6 font-extrabold text-sm sm:text-base flex items-center justify-center gap-2.5 transition border-b-2 ${
+          className={`py-3.5 px-3 sm:py-4 sm:px-6 font-extrabold text-xs sm:text-base flex items-center justify-center gap-1.5 sm:gap-2.5 transition border-b-2 text-center leading-tight ${
             enquiryType === 'rent'
               ? 'border-emerald-600 bg-white text-emerald-700 shadow-xs'
               : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
           id="enquiry-tab-rental"
         >
-          <Package className={`w-5 h-5 ${enquiryType === 'rent' ? 'text-emerald-600' : 'text-slate-400'}`} />
+          <Package className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${enquiryType === 'rent' ? 'text-emerald-600' : 'text-slate-400'}`} />
           <span>Oxygen Equipment Rental Enquiry</span>
         </button>
       </div>
 
-      <div className="p-6 sm:p-10">
+      <div className="p-4 sm:p-8 md:p-10">
         {/* Value badge banner */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50/70 border border-sky-100 mb-8">
-          <div className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping flex-shrink-0" />
-            <span>
-              <strong>{enquiryType === 'repair' ? 'Service Priority' : 'Rental Fleet'}</strong>:{' '}
-              {enquiryType === 'repair'
-                ? 'Certified 93%+ purity calibration, genuine molecular sieve & compressor rebuilds.'
-                : 'Medical grade sterilized 5L, 10L, and portable POCs available with doorstep installation.'}
-            </span>
-          </div>
+        {!hideExtraDetails && (
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50/70 border border-sky-100 mb-8">
+            <div className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping flex-shrink-0" />
+              <span>
+                <strong>{enquiryType === 'repair' ? 'Service Priority' : 'Rental Fleet'}</strong>:{' '}
+                {enquiryType === 'repair'
+                  ? 'Certified 93%+ purity calibration, genuine molecular sieve & compressor rebuilds.'
+                  : 'Medical grade sterilized 5L, 10L, and portable POCs available with doorstep installation.'}
+              </span>
+            </div>
 
-          <div className="flex items-center gap-3 text-[11px] font-bold text-slate-600">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
-              Certified Engineers
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-emerald-600" />
-              Prompt Turnaround
-            </span>
+            <div className="flex items-center gap-3 text-[11px] font-bold text-slate-600">
+              <span className="flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
+                Certified Engineers
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-emerald-600" />
+                Prompt Turnaround
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {errorMsg && (
           <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2">
@@ -390,76 +393,82 @@ export default function ServiceRentalEnquiryForm({ defaultCity = 'Mumbai' }: Pro
           )}
 
           {/* Row 4: Fulfillment Mode & Preferred Date */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
-                Service Fulfillment Mode <span className="text-rose-500">*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, fulfillmentType: 'Doorstep Pickup / Delivery' })}
-                  className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                    formData.fulfillmentType === 'Doorstep Pickup / Delivery'
-                      ? 'bg-sky-50 border-sky-600 text-sky-800'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <Check className={`w-3.5 h-3.5 ${formData.fulfillmentType === 'Doorstep Pickup / Delivery' ? 'opacity-100' : 'opacity-0'}`} />
-                  <span>Doorstep Pickup / Delivery</span>
-                </button>
+          {!hideExtraDetails && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
+                  Service Fulfillment Mode <span className="text-rose-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, fulfillmentType: 'Doorstep Pickup / Delivery' })}
+                    className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                      formData.fulfillmentType === 'Doorstep Pickup / Delivery'
+                        ? 'bg-sky-50 border-sky-600 text-sky-800'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Check className={`w-3.5 h-3.5 ${formData.fulfillmentType === 'Doorstep Pickup / Delivery' ? 'opacity-100' : 'opacity-0'}`} />
+                    <span>Doorstep Pickup / Delivery</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, fulfillmentType: 'Self Visit to Service Center' })}
-                  className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                    formData.fulfillmentType === 'Self Visit to Service Center'
-                      ? 'bg-sky-50 border-sky-600 text-sky-800'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <Check className={`w-3.5 h-3.5 ${formData.fulfillmentType === 'Self Visit to Service Center' ? 'opacity-100' : 'opacity-0'}`} />
-                  <span>Drop at Service Center</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, fulfillmentType: 'Self Visit to Service Center' })}
+                    className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                      formData.fulfillmentType === 'Self Visit to Service Center'
+                        ? 'bg-sky-50 border-sky-600 text-sky-800'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Check className={`w-3.5 h-3.5 ${formData.fulfillmentType === 'Self Visit to Service Center' ? 'opacity-100' : 'opacity-0'}`} />
+                    <span>Drop at Service Center</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
+                  Preferred Date / Urgency
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={formData.preferredDate}
+                    onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition outline-none"
+                  />
+                  <Calendar className="w-4 h-4 text-slate-400 absolute right-3.5 top-3 pointer-events-none" />
+                </div>
               </div>
             </div>
-
-            <div>
-              <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
-                Preferred Date / Urgency
-              </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={formData.preferredDate}
-                  onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition outline-none"
-                />
-                <Calendar className="w-4 h-4 text-slate-400 absolute right-3.5 top-3 pointer-events-none" />
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Row 5: Address / Area Location */}
-          <div>
-            <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
-              Pickup / Delivery Address & Landmark
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Flat 302, Green Meadows, near Metro Station, Borivali / Kothrud / Gomti Nagar"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition outline-none"
-            />
-          </div>
+          {!hideExtraDetails && (
+            <div>
+              <label className="block text-xs font-black uppercase text-slate-700 mb-1.5">
+                Pickup / Delivery Address & Landmark
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Flat 302, Green Meadows, near Metro Station, Borivali / Kothrud / Gomti Nagar"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition outline-none"
+              />
+            </div>
+          )}
 
           {/* Submit Action */}
-          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-slate-500 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-sky-500 flex-shrink-0" />
-              <span>Direct technical coordinator assignment across Mumbai, Pune & Lucknow.</span>
-            </div>
+          <div className={`pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-4 ${hideExtraDetails ? 'justify-end' : 'justify-between'}`}>
+            {!hideExtraDetails && (
+              <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-sky-500 flex-shrink-0" />
+                <span>Direct technical coordinator assignment across Mumbai, Pune & Lucknow.</span>
+              </div>
+            )}
 
             <button
               type="submit"

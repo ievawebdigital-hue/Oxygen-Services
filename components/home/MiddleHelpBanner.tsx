@@ -22,10 +22,10 @@ export default function MiddleHelpBanner() {
           <div className="my-4 sm:my-5">
             <a
               href={`tel:+91${COMPANY_CONTACT.primaryPhone}`}
-              className="inline-flex items-center gap-2 sm:gap-3 text-2xl sm:text-4xl md:text-5xl font-black text-sky-600 hover:text-sky-700 tracking-tight transition group"
+              className="inline-flex items-center gap-2 sm:gap-3 text-xl xs:text-2xl sm:text-4xl md:text-5xl font-black text-sky-600 hover:text-sky-700 tracking-tight transition group whitespace-nowrap"
               id="middle-helpline-phone"
             >
-              <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-sky-600 group-hover:scale-110 transition-transform" />
+              <Phone className="w-5 h-5 sm:w-8 sm:h-8 text-sky-600 group-hover:scale-110 transition-transform flex-shrink-0" />
               <span>{COMPANY_CONTACT.primaryPhone.slice(0, 4)} - {COMPANY_CONTACT.primaryPhone.slice(4, 7)} - {COMPANY_CONTACT.primaryPhone.slice(7)}</span>
             </a>
           </div>

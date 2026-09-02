@@ -131,7 +131,7 @@ export default function WhatsAppLiveChat() {
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="mb-3 bg-white text-slate-800 p-3.5 rounded-2xl shadow-xl border border-slate-200/90 max-w-xs relative cursor-pointer group hover:border-emerald-400 transition"
+            className="hidden md:block mb-3 bg-white text-slate-800 p-3.5 rounded-2xl shadow-xl border border-slate-200/90 max-w-xs relative cursor-pointer group hover:border-emerald-400 transition"
             onClick={() => handleToggleOpen(true)}
           >
             <button
@@ -336,7 +336,7 @@ export default function WhatsAppLiveChat() {
         onClick={() => handleToggleOpen()}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className={`relative flex items-center gap-2.5 px-4 py-3.5 rounded-full shadow-2xl transition-all duration-300 cursor-pointer select-none ${
+        className={`relative flex items-center gap-2.5 p-3.5 md:px-4 md:py-3.5 rounded-full shadow-2xl transition-all duration-300 cursor-pointer select-none ${
           isOpen
             ? 'bg-slate-900 text-white ring-4 ring-slate-800/30'
             : 'bg-[#25D366] hover:bg-[#20bd5a] text-white ring-4 ring-emerald-400/30 shadow-emerald-600/30'
@@ -361,7 +361,7 @@ export default function WhatsAppLiveChat() {
           )}
         </div>
 
-        <span className="font-bold text-xs sm:text-sm tracking-wide flex items-center gap-1.5 pr-0.5">
+        <span className="hidden md:inline-flex font-bold text-xs sm:text-sm tracking-wide items-center gap-1.5 pr-0.5">
           {isOpen ? 'Close Chat' : 'WhatsApp Support'}
         </span>
       </motion.button>

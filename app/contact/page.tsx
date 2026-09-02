@@ -46,53 +46,9 @@ export default function ContactPage() {
             </p>
           </div>
 
-          {/* Centralized Contact Quick Bar */}
-          <div className="bg-[#0B1F33] text-white rounded-3xl p-6 sm:p-8 mb-12 border border-slate-800 shadow-xl grid grid-cols-1 sm:grid-cols-3 gap-6 text-center sm:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-[#19C6D9] flex items-center justify-center flex-shrink-0">
-                <Phone className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">Primary Helpline</p>
-                <a href={`tel:+91${COMPANY_CONTACT.primaryPhone}`} className="text-base sm:text-lg font-bold text-white hover:text-[#19C6D9]">
-                  +91 {COMPANY_CONTACT.primaryPhone}
-                </a>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
-                <MessageSquare className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">WhatsApp Quick Chat</p>
-                <a
-                  href={COMPANY_CONTACT.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-base sm:text-lg font-bold text-emerald-400 hover:underline"
-                >
-                  +91 {COMPANY_CONTACT.whatsapp}
-                </a>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0">
-                <Mail className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">Email Support</p>
-                <a href={`mailto:${COMPANY_CONTACT.email}`} className="text-sm font-bold text-slate-200 hover:text-white">
-                  {COMPANY_CONTACT.email}
-                </a>
-              </div>
-            </div>
-          </div>
-
           {/* Service & Rental Enquiry Form */}
           <div className="mb-12">
-            <ServiceRentalEnquiryForm />
+            <ServiceRentalEnquiryForm hideExtraDetails={true} />
           </div>
         </div>
       </main>

@@ -29,11 +29,11 @@ export default function HelplineUrgentBanner({ id = 'urgent-helpline-top' }: Hel
           <div className="my-4 sm:my-5">
             <a
               href={`tel:+91${COMPANY_CONTACT.primaryPhone}`}
-              className="inline-flex items-center gap-3 text-2xl sm:text-4xl md:text-5xl font-black text-sky-600 hover:text-sky-700 tracking-tight transition group"
+              className="inline-flex items-center gap-2 sm:gap-3 text-xl xs:text-2xl sm:text-4xl md:text-5xl font-black text-sky-600 hover:text-sky-700 tracking-tight transition group whitespace-nowrap"
               id="top-helpline-phone-btn"
             >
-              <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="w-9 h-9 sm:w-12 sm:h-12 rounded-2xl bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
               </span>
               <span>{COMPANY_CONTACT.primaryPhone.slice(0, 4)} - {COMPANY_CONTACT.primaryPhone.slice(4, 7)} - {COMPANY_CONTACT.primaryPhone.slice(7)}</span>
             </a>

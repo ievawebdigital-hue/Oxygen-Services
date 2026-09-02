@@ -6,11 +6,7 @@ import MobileStickyBar from '@/components/layout/MobileStickyBar';
 import HeroSection from '@/components/home/HeroSection';
 import HelplineUrgentBanner from '@/components/home/HelplineUrgentBanner';
 import BrandLogosBanner from '@/components/home/BrandLogosBanner';
-import ServicesThreeCardSection from '@/components/home/ServicesThreeCardSection';
-import WhyChooseUsSection from '@/components/home/WhyChooseUsSection';
 import MiddleHelpBanner from '@/components/home/MiddleHelpBanner';
-import AboutAndEstimateSection from '@/components/home/AboutAndEstimateSection';
-import GoogleReviewsSection from '@/components/home/GoogleReviewsSection';
 import { getOrganizationSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -57,20 +53,8 @@ export default function HomePage() {
         {/* 3. Leading Equipment Brands Strip */}
         <BrandLogosBanner />
 
-        {/* 4. Services (3-Card Section: Sieve Repour, Compressor Rebuild, Valve/PCB) */}
-        <ServicesThreeCardSection />
-
-        {/* 5. Why Choose Us (6-Pillar Feature Grid) */}
-        <WhyChooseUsSection />
-
-        {/* 6. Middle Helpline Callout ("Getting Help is Easy") */}
+        {/* 3. Middle Helpline Callout ("Getting Help is Easy") */}
         <MiddleHelpBanner />
-
-        {/* 7. Two-Column Section: About Us & 10-Point Checklist + Free Estimate Form */}
-        <AboutAndEstimateSection />
-
-        {/* 8. Google Reviews & Testimonials Carousel ("What our client says") */}
-        <GoogleReviewsSection />
       </main>
 
       {/* Footer */}
